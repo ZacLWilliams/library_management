@@ -17,7 +17,8 @@ public class readData {
 	public static void main(String[] args) {
     	String file = "books.csv";
 		readCSV(file);
-		add_to_db(bookList);
+		//add_to_db(bookList);
+		add_images_to_db(bookList);
 	}
 
 	public static void readCSV(String file) { 
@@ -50,8 +51,10 @@ public class readData {
 	}
 
 	public static void add_to_db(ArrayList<Book> bookList) {
+
 		String sql = "INSERT IGNORE INTO book VALUES (?, NULL, ?, ?, ?, ?)";
 		String temp;
+
 		try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
 		PreparedStatement statement = con.prepareStatement(sql)) {
 			int count = 0;
@@ -64,6 +67,30 @@ public class readData {
 				statement.setString(5, book.getPublisher());
 				statement.executeUpdate();
 				count++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void add_images_to_db(ArrayList<Book> bookList) {
+
+		String sql = "INSERT IGNORE INTO images VALUES (?, ?, ?, ?)";
+		String temp;
+
+		try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+		PreparedStatement statement = con.prepareStatement(sql)) {
+			int count = 0;
+			for (Book book : bookList) {
+
+				temp = "INSERT INTO images VALUES ('" + book.getIsbn() + book.getUrls()[0] + "', '" + book.getUrls()[1] + "', " + book.getUrls()[2] + "')";
+				System.out.println(count + " " + temp);
+				count++;
+
+				// Insert values into database
+				statement.setString(1, book.getIsbn()); statement.setString(2, book.getUrls()[0]);
+				statement.setString(3, book.getUrls()[1]); statement.setString(4, book.getUrls()[2]); 
+				statement.executeUpdate();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
