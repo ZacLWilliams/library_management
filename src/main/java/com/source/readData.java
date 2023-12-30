@@ -10,14 +10,14 @@ import java.util.ArrayList;
 
 public class readData {
 	private static ArrayList<Book> bookList = new ArrayList<Book>();
-	static final String DB_URL = "jdbc:mysql://localhost/library_db";
-	static final String USER = "root";
-	static final String PASS = "Sapiens789-";
+	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
+	private static final String USER = "root";
+	private static final String PASS = "Sapiens789-";
 
 	public static void main(String[] args) {
     	String file = "books.csv";
 		readCSV(file);
-		//add_to_db(bookList);
+		add_to_db(bookList);
 		add_images_to_db(bookList);
 	}
 
@@ -83,7 +83,7 @@ public class readData {
 			int count = 0;
 			for (Book book : bookList) {
 
-				temp = "INSERT INTO images VALUES ('" + book.getIsbn() + book.getUrls()[0] + "', '" + book.getUrls()[1] + "', " + book.getUrls()[2] + "')";
+				temp = "INSERT INTO images VALUES ('" + book.getIsbn() + "', '" + book.getUrls()[0] + "', '" + book.getUrls()[1] + "', " + book.getUrls()[2] + "')";
 				System.out.println(count + " " + temp);
 				count++;
 

@@ -1,19 +1,16 @@
 package com.source;
 
-public class Users {
+public class User {
     private String username;
     private String passUncrypt;
 
-    public void setUsername(String inputUsername) {
+    User(String inputUsername, String inputPassword) {
         username = inputUsername;
+        passUncrypt = inputPassword;
     }
 
     public String getUsername() {
         return username;
-    }
-
-    public void setPassword(String inputPassword) {
-        passUncrypt = inputPassword;
     }
 
     public String getPassword() {
