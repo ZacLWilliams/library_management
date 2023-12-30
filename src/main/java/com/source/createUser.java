@@ -34,10 +34,11 @@ public class createUser {
 
         //Check to see if user input fulfils requirements
         String sql1 = "SELECT EXISTS (SELECT * FROM user WHERE username = ?)";
+        String sql2 = "INSERT INTO user (username, password) VALUES (?, ?)";
 		try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
-		PreparedStatement statement1 = con.prepareStatement(sql1)) {
+		PreparedStatement statement1 = con.prepareStatement(sql1);
+        PreparedStatement statement2 = con.prepareStatement(sql2)) {
 
-			// Set values
 			statement1.setString(1, user.getUsername());
 
 			usernameResult = statement1.executeQuery();
@@ -48,7 +49,9 @@ public class createUser {
                 return 0;
             }
             else {
-
+                statement2.setString(1, user.getUsername());
+                statement2.setString(2, user.getPassword());
+                statement2.executeUpdate();
             }
 
 		} catch (SQLException e) {
@@ -56,21 +59,5 @@ public class createUser {
 		}
         // 1 means username and password were successfully added to the database
         return 1;
-
-
-
-        //String sql3 = "INSERT INTO user (username, password) VALUES (?, ?)";
-
-		//try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
-		//PreparedStatement statement = con.prepareStatement(sql)) {
-
-			// Insert values into database
-		//	statement.setString(1, user.getUsername());
-		//	statement.setString(2, user.getPassword());
-		//	statement.executeUpdate();
-
-		//} catch (SQLException e) {
-		//	e.printStackTrace();
-		//}
     }
 }

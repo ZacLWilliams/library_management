@@ -2,6 +2,7 @@ package com.source;
 
 public class test {
     public static void main(String[] args) {
-        createUser.add_to_db_check();
+        int p = createUser.add_to_db_check();
+        System.out.println(p);
     }
 }
