@@ -1,6 +1,7 @@
 package com.source;
 
 import java.net.*;
+import java.util.stream.Collectors;
 import java.io.*;
 //import java.util.*;
 
@@ -59,12 +60,22 @@ public class webServer {
                     Thread t = new Thread(new ClientHandler(client));
                     t.start();
 
-                    OutputStream clientOutput = client.getOutputStream();
-                    clientOutput.write(("HTTP/1.1 200 OK\r\n").getBytes());
-                    clientOutput.write(("\r\n").getBytes());
-                    clientOutput.write(("Hello World").getBytes());
+                    //OutputStream clientOutput = client.getOutputStream();
+                    //clientOutput.write(("HTTP/1.1 200 OK\r\n").getBytes());
+                    //clientOutput.write(("\r\n").getBytes());
+                    //clientOutput.write(("Hello World").getBytes());
+                    //clientOutput.flush();
 
-                    clientOutput.flush();
+
+                    PrintWriter out = new PrintWriter(client.getOutputStream());
+                    out.println("HTTP/1.1 200 OK");
+                    out.println("Content-type: text/html");
+                    out.println("\r\n");
+                    InputStream in = this.getClass().getClassLoader().getResourceAsStream("Library_management_frontend.html");
+                    String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
+                    out.println(s);
+                    out.flush();
+                    out.close();
                     
                     client.close();
                 }
