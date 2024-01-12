@@ -9,9 +9,6 @@
             /*background: #f2f2f2;*/
             font-family: 'Open Sans', sans-serif;
         }
-        h1{
-            background: #f2f2f2;
-        }
         .search {
             width: 60%;
             position: relative;
@@ -54,9 +51,18 @@
             margin-bottom:0;
         }
         h1 {
+            background: #f2f2f2;
             margin-top:0;
         }
+        /* h2 {
+            margin-bottom:0;
+        }*/
         </style>
+        <script>
+            function test() {
+                location.reload();
+            }
+        </script>
     </head>
     <body>
         <p align="right">
@@ -72,6 +78,7 @@
                 <div class="search">
                    <input type="text" class="searchTerm" placeholder="Book/Author" id="search" name="search">
                    <button type="submit" class="searchButton">
+                   <!-- <button type="submit" class="searchButton" onclick="test()"> -->
                      <i class="fa fa-search"></i>
                   </button>
                 </div>
