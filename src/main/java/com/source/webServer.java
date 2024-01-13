@@ -64,8 +64,14 @@ public class webServer {
         if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
             webpage = "Homepage.html";
         }
-        else {
+        else if (userSearch.equals("/createaccount")) {
             webpage = "Create_account.html";
+        }
+        else if (userSearch.equals("/login")) {
+            webpage = "Login.html";
+        }
+        else {
+            webpage = "Homepage.html";
         }
         return webpage;
     }
