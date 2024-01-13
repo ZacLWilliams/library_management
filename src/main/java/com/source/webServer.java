@@ -35,8 +35,8 @@ public class webServer {
                         request.append(line + "\r\n");
                         line = reader.readLine();
                     }
+                    //if ()
                     printRequest(request);
-    
     
                 } catch (Exception ex) {//ex.printStackTrace();
                     System.out.println("TEST2");}
@@ -55,6 +55,7 @@ public class webServer {
 
     public String cleanRequest(String line) {
         line = line.replace("GET ", "");
+        line = line.replace("POST ", "");
         return line.replace(" HTTP/1.1", "");
     }
 
@@ -112,6 +113,7 @@ public class webServer {
                         webPage = determineWebpage(userSearch);
                         InputStream in = this.getClass().getClassLoader().getResourceAsStream(webPage);
                         String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
+
                         check = false;
 
                         out.println(s);
