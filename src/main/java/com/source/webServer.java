@@ -7,7 +7,7 @@ import java.io.*;
 
 //Relocate to new source file
 public class webServer {
-    private String userInput;
+    private String userSearch;
     private boolean check = false;
     public class ClientHandler implements Runnable {
         BufferedReader reader;
@@ -22,24 +22,25 @@ public class webServer {
 
         public void run() {
             String line;
-            try {
-                StringBuilder request = new StringBuilder();
-                line = reader.readLine();
-
-                webServer.this.userInput = cleanRequest(line);
-                
-                while (!line.isBlank()) {
-                    //System.out.println("debug");
-                    request.append(line + "\r\n");
+            //synchronized(this) {
+                try {
+                    StringBuilder request = new StringBuilder();
                     line = reader.readLine();
-                }
-                printRequest(request);
-                check = true;
-
-                //System.out.println("--REQUEST--");
-                //System.out.println(request);
-
-            } catch (Exception ex) {ex.printStackTrace();System.out.println("TEST2");}
+    
+                    webServer.this.userSearch = cleanRequest(line);
+                    check = true;
+                    
+                    while (!line.isBlank()) {
+                        //System.out.println("debug");
+                        request.append(line + "\r\n");
+                        line = reader.readLine();
+                    }
+                    printRequest(request);
+    
+    
+                } catch (Exception ex) {//ex.printStackTrace();
+                    System.out.println("TEST2");}
+            //}
         }
     }
     public static void main(String[] args) {
@@ -57,6 +58,18 @@ public class webServer {
         return line.replace(" HTTP/1.1", "");
     }
 
+    public String determineWebpage(String userSearch) {
+        String webpage;
+        //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
+        if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
+            webpage = "Homepage.html";
+        }
+        else {
+            webpage = "Create_account.html";
+        }
+        return webpage;
+    }
+
     public void go() {
         String webPage;
         // Make server socket
@@ -67,9 +80,14 @@ public class webServer {
                 // Handle new incoming messages
                 try(Socket client = serverSocket.accept()) {
                     //System.out.println("Debug:" + client.toString());
-
-                    Thread t = new Thread(new ClientHandler(client));
-                    t.start();
+                    //System.out.println(client.isClosed());
+                    if (check == false) {
+                        Thread t = new Thread(new ClientHandler(client));
+                        t.start();
+                        while (t.isAlive()) {
+                            //System.out.println("Waiting...");
+                        }
+                    }
 
                     //OutputStream clientOutput = client.getOutputStream();
                     //clientOutput.write(("HTTP/1.1 200 OK\r\n").getBytes());
@@ -77,15 +95,6 @@ public class webServer {
                     //clientOutput.write(("Hello World").getBytes());
                     //clientOutput.flush();
 
-                    //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
-                    if (userInput == null || userInput.equals("/") || userInput.equals("/response?search=")) {
-                        System.out.println("1");
-                        webPage = "Homepage.html";
-                    }
-                    else {
-                        System.out.println("2");
-                        webPage = "Create_account.html";
-                    }
 
                     PrintWriter out = new PrintWriter(client.getOutputStream());
                     out.println("HTTP/1.1 200 OK");
@@ -94,16 +103,20 @@ public class webServer {
                     
                     //Make sure we have processed user's input before reloading site
                     if (check == true) {
+                        webPage = determineWebpage(userSearch);
                         InputStream in = this.getClass().getClassLoader().getResourceAsStream(webPage);
                         String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
+                        check = false;
 
                         out.println(s);
-                        out.flush();
                         out.close();
+                        out.flush();
                     
                         client.close();
-                        check = false;
                     }
+                } catch(IOException ex) {
+                    ex.printStackTrace();
+                    System.out.println("TEST4");
                 }
             }
         } catch(IOException ex) {
