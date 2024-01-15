@@ -1,11 +1,13 @@
 package com.source;
 
 import java.net.*;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-//import org.jsoup.Jsoup;
-//import org.jsoup.nodes.Document;
-//import org.jsoup.nodes.Element;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.*;
 //import java.util.*;
@@ -15,6 +17,7 @@ public class webServer {
     private String content;
     private String userSearch;
     private boolean check = false;
+    private boolean passwordCheck = false;
     public class ClientHandler implements Runnable {
         BufferedReader reader;
         Socket sock;
@@ -58,6 +61,7 @@ public class webServer {
 
     public String determineWebpage(String userSearch) throws IOException {
         String webpage;
+        ArrayList<String> arr = new ArrayList<String>();
         //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
         if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
             webpage = "Homepage.html";
@@ -65,14 +69,21 @@ public class webServer {
         else if (userSearch.equals("/createaccount")) {
             webpage = "Create_account.html";
             if (content != "") {
-                if (processInfo.determineUserCreateInput(content) == false) {
-            //        File file = new File("src/main/resources/Create_account.html");
-            //        Document html = Jsoup.parse(file, "UTF-8"); 
-            //        Element test = html.select("p").first();
-            //        test.text("Altered");
-
-                    //OutputStream outhtml = new FileOutputStream(file);
-                    //outhtml.close();
+                arr = processInfo.determineUserCreateInput(content);
+                if (Boolean.valueOf(arr.get(3)) == false) {
+                    File file = new File("src/main/resources/Create_account.html");
+                    Document html = Jsoup.parse(file, "UTF-8"); 
+                    html.select("input[name$=username]").attr("value", arr.get(0));
+                    html.select("input[name$=password]").attr("value", arr.get(1));
+                    html.select("input[name$=confirmpassword]").attr("value", arr.get(2));
+    
+                    FileWriter writer = new FileWriter(file);
+                    writer.write(html.toString());
+                    writer.flush();
+                    writer.close();
+                } else {
+                    //Successfully created account, redirect to success page, current page is temp
+                    webpage = "Homepage.html";
                 }
             }
         }

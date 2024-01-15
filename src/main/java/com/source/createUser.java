@@ -34,7 +34,7 @@ public class createUser {
             if (usernameResult.getInt(1) == 1) {
                 // false means username already exists
                 return false;
-            }
+            } 
             else {
                 statement2.setString(1, user.getUsername());
                 statement2.setString(2, user.getPassword());
