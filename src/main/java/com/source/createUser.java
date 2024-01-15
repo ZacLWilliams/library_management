@@ -5,25 +5,34 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class createUser {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
 	private static final String PASS = "Sapiens789-";
 
-    public static User readInput() {
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Enter username: ");
-        String scan1 = reader.next();
-        System.out.println("Enter password: ");
-        String scan2 = reader.next();
-        User user = new User(scan1, scan2);
-        reader.close();
-        return user;
-    }
-    public static int add_to_db_check() {
-        User user = readInput();
+    //public static User readInput() {
+    //    Scanner reader = new Scanner(System.in);
+    //    System.out.println("Enter username: ");
+    //    String scan1 = reader.next();
+    //    System.out.println("Enter password: ");
+    //    String scan2 = reader.next();
+    //    User user = new User(scan1, scan2);
+    //    reader.close();
+    //    return user;
+    //}
+    public static int add_to_db_check(String username, String pass, String confirmpass) {
+        // 3 means passwords do not match
+        // 2 means password is below required length
+        // 1 means username and password were successfully added to the database
+        // 0 means username already exists
+        if (pass.equals(confirmpass) == false) {
+            // 3 means passwords do not match
+            return 3;
+        }
+        User user = new User(username, pass);
+        //User user = readInput();
 
         if (user.getPassword().length() < 8) {
             // 2 means password is below required length

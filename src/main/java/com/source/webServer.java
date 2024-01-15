@@ -7,6 +7,7 @@ import java.io.*;
 
 //Relocate to new source file
 public class webServer {
+    private String content;
     private String userSearch;
     private boolean check = false;
     public class ClientHandler implements Runnable {
@@ -29,7 +30,7 @@ public class webServer {
     
                     webServer.this.userSearch = cleanRequest(line);
 
-                    String content = manageRequest.processRequest(reader, request, line);
+                    content = manageRequest.processRequest(reader, request, line);
                     System.out.println(content);
 
                     check = true;
@@ -58,6 +59,9 @@ public class webServer {
         }
         else if (userSearch.equals("/createaccount")) {
             webpage = "Create_account.html";
+            if (content != "") {
+                processInfo.determineUserCreateInput(content);
+            }
         }
         else if (userSearch.equals("/login")) {
             webpage = "Login.html";
@@ -92,6 +96,7 @@ public class webServer {
                     //clientOutput.write(("Hello World").getBytes());
                     //clientOutput.flush();
 
+                    webPage = determineWebpage(userSearch);
 
                     PrintWriter out = new PrintWriter(client.getOutputStream());
                     out.println("HTTP/1.1 200 OK");
@@ -100,7 +105,6 @@ public class webServer {
                     
                     //Make sure we have processed user's input before reloading site
                     if (check == true) {
-                        webPage = determineWebpage(userSearch);
                         InputStream in = this.getClass().getClassLoader().getResourceAsStream(webPage);
                         String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
 

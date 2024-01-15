@@ -10,7 +10,6 @@ public class manageRequest {
         int i;
         int x = 0;
         int intchar;
-        char c;
 
         i = line.indexOf(" ");
         type = line.substring(0, i);
@@ -36,11 +35,10 @@ public class manageRequest {
             while (x < contentLength) {
                 x++;
                 intchar = reader.read();
-                c = (char) intchar;
-                content = content + c;
+                content = content + (char) intchar;
             }
         }
-        printRequest(request);
+        //printRequest(request);
         return content;
     }
     public static void printRequest(StringBuilder request) {
