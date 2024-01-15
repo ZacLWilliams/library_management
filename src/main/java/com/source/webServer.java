@@ -2,6 +2,11 @@ package com.source;
 
 import java.net.*;
 import java.util.stream.Collectors;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import java.io.*;
 //import java.util.*;
 
@@ -31,7 +36,7 @@ public class webServer {
                     webServer.this.userSearch = cleanRequest(line);
 
                     content = manageRequest.processRequest(reader, request, line);
-                    System.out.println(content);
+                    //System.out.println(content);
 
                     check = true;
     
@@ -51,7 +56,7 @@ public class webServer {
         return line.replace(" HTTP/1.1", "");
     }
 
-    public String determineWebpage(String userSearch) {
+    public String determineWebpage(String userSearch) throws IOException {
         String webpage;
         //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
         if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
@@ -60,7 +65,15 @@ public class webServer {
         else if (userSearch.equals("/createaccount")) {
             webpage = "Create_account.html";
             if (content != "") {
-                processInfo.determineUserCreateInput(content);
+                if (processInfo.determineUserCreateInput(content) == false) {
+                    File file = new File("src/main/resources/Create_account.html");
+                    Document html = Jsoup.parse(file, "UTF-8"); 
+                    Element test = html.select("p").first();
+                    test.text("Altered");
+
+                    //OutputStream outhtml = new FileOutputStream(file);
+                    //outhtml.close();
+                }
             }
         }
         else if (userSearch.equals("/login")) {
@@ -115,6 +128,16 @@ public class webServer {
                         out.flush();
                     
                         client.close();
+
+                        if (webPage.equals("Create_account.html")) {
+                            File file = new File("src/main/resources/Create_account.html");
+                            Document html = Jsoup.parse(file, "UTF-8"); 
+                            Element test = html.select("p").first();
+                            test.text("Username");
+
+                            //OutputStream outhtml = new FileOutputStream(file);
+                            //outhtml.close();
+                        }
                     }
                 } catch(IOException ex) {
                     ex.printStackTrace();

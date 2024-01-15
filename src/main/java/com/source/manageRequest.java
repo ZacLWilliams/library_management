@@ -6,10 +6,14 @@ public class manageRequest {
         String type;
         String info;
         String content = "";
+        //String reservedVal = "";
         int contentLength = 0;
         int i;
         int x = 0;
         int intchar;
+        //int count = 0;
+        char c;
+        //byte[] utf;
 
         i = line.indexOf(" ");
         type = line.substring(0, i);
@@ -35,7 +39,21 @@ public class manageRequest {
             while (x < contentLength) {
                 x++;
                 intchar = reader.read();
-                content = content + (char) intchar;
+                c = (char) intchar;
+                content = content + c;
+                //if (("" + c).equals("%") || count == 1 || count == 2) {
+                //    count++;
+                //    reservedVal = reservedVal + c;
+                //} else if (count == 3) {
+                //    utf = reservedVal.getBytes("ISO-8859-1");
+                //    count = 0;
+                //    String tempString = new String(utf, "UTF-8");
+                //    reservedVal = "";
+                //    content = content + tempString;
+                //}
+                //else {
+                //    content = content + c;
+                //}
             }
         }
         //printRequest(request);

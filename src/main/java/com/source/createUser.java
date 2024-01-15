@@ -12,32 +12,10 @@ public class createUser {
 	private static final String USER = "root";
 	private static final String PASS = "Sapiens789-";
 
-    //public static User readInput() {
-    //    Scanner reader = new Scanner(System.in);
-    //    System.out.println("Enter username: ");
-    //    String scan1 = reader.next();
-    //    System.out.println("Enter password: ");
-    //    String scan2 = reader.next();
-    //    User user = new User(scan1, scan2);
-    //    reader.close();
-    //    return user;
-    //}
-    public static int add_to_db_check(String username, String pass, String confirmpass) {
-        // 3 means passwords do not match
-        // 2 means password is below required length
-        // 1 means username and password were successfully added to the database
-        // 0 means username already exists
-        if (pass.equals(confirmpass) == false) {
-            // 3 means passwords do not match
-            return 3;
-        }
+    public static boolean add_to_db_check(String username, String pass, String confirmpass) {
+        // true means username and password were successfully added to the database
+        // false means username already exists
         User user = new User(username, pass);
-        //User user = readInput();
-
-        if (user.getPassword().length() < 8) {
-            // 2 means password is below required length
-            return 2;
-        }
 
         ResultSet usernameResult = null;
 
@@ -54,8 +32,8 @@ public class createUser {
             usernameResult.next();
             
             if (usernameResult.getInt(1) == 1) {
-                // 0 means username already exists
-                return 0;
+                // false means username already exists
+                return false;
             }
             else {
                 statement2.setString(1, user.getUsername());
@@ -66,7 +44,7 @@ public class createUser {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        // 1 means username and password were successfully added to the database
-        return 1;
+        // true means username and password were successfully added to the database
+        return true;
     }
 }
