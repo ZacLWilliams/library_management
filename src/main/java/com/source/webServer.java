@@ -3,9 +3,9 @@ package com.source;
 import java.net.*;
 import java.util.stream.Collectors;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+//import org.jsoup.Jsoup;
+//import org.jsoup.nodes.Document;
+//import org.jsoup.nodes.Element;
 
 import java.io.*;
 //import java.util.*;
@@ -66,10 +66,10 @@ public class webServer {
             webpage = "Create_account.html";
             if (content != "") {
                 if (processInfo.determineUserCreateInput(content) == false) {
-                    File file = new File("src/main/resources/Create_account.html");
-                    Document html = Jsoup.parse(file, "UTF-8"); 
-                    Element test = html.select("p").first();
-                    test.text("Altered");
+            //        File file = new File("src/main/resources/Create_account.html");
+            //        Document html = Jsoup.parse(file, "UTF-8"); 
+            //        Element test = html.select("p").first();
+            //        test.text("Altered");
 
                     //OutputStream outhtml = new FileOutputStream(file);
                     //outhtml.close();
@@ -129,15 +129,15 @@ public class webServer {
                     
                         client.close();
 
-                        if (webPage.equals("Create_account.html")) {
-                            File file = new File("src/main/resources/Create_account.html");
-                            Document html = Jsoup.parse(file, "UTF-8"); 
-                            Element test = html.select("p").first();
-                            test.text("Username");
+                        //if (webPage.equals("Create_account.html")) {
+                        //    File file = new File("src/main/resources/Create_account.html");
+                        //    Document html = Jsoup.parse(file, "UTF-8"); 
+                        //    Element test = html.select("p").first();
+                        //    test.text("Username");
 
                             //OutputStream outhtml = new FileOutputStream(file);
                             //outhtml.close();
-                        }
+                        //}
                     }
                 } catch(IOException ex) {
                     ex.printStackTrace();
