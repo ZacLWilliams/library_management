@@ -22,53 +22,17 @@ public class webServer {
 
         public void run() {
             String line;
-            String type;
-            String info;
-            String content = "";
-            int x = 0;
-            int i;
-            int intchar;
-            char c;
-            int contentLength = 0;
             //synchronized(this) {
                 try {
                     StringBuilder request = new StringBuilder();
                     line = reader.readLine();
-
-                    i = line.indexOf(" ");
-                    type = line.substring(0, i);
     
                     webServer.this.userSearch = cleanRequest(line);
-                    check = true;
-                    
-                    while (!line.isBlank()) {
-                        //System.out.println("debug");
-                        request.append(line + "\r\n");
-                        line = reader.readLine();
 
-                        i = line.indexOf(" ");
-                        if (i < 0) {
-                            break;
-                        }
-                        info = line.substring(0, i);
-                        if (info.equals("Content-Length:")) {
-                            contentLength = Integer.valueOf(line.substring(i + 1));
-                            System.out.println(contentLength);
-                        }
-                    }
-                    //if ()
-                    //printRequest(request);
-                    //String requestString = request.toString();
-                    System.out.println(type);
-                    if (type.equals("POST") && contentLength != 0) {
-                        while (x < contentLength) {
-                            x++;
-                            intchar = reader.read();
-                            c = (char) intchar;
-                            content = content + c;
-                        }
-                        System.out.println(content);
-                    }
+                    String content = manageRequest.processRequest(reader, request, line);
+                    System.out.println(content);
+
+                    check = true;
     
                 } catch (Exception ex) {ex.printStackTrace();
                     System.out.println("TEST2");}
@@ -78,11 +42,6 @@ public class webServer {
     public static void main(String[] args) {
         webServer server = new webServer();
         server.go();
-    }
-
-    public void printRequest(StringBuilder request) {
-        System.out.println("--REQUEST--");
-        System.out.println(request);
     }
 
     public String cleanRequest(String line) {
@@ -113,7 +72,6 @@ public class webServer {
         String webPage;
         // Make server socket
         try(ServerSocket serverSocket = new ServerSocket(4242)) {
-            // Socket sock = new Socket("87.121.93.116", 4242);
             // Handle new messages
             while(true) {
                 // Handle new incoming messages
