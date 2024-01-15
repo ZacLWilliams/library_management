@@ -16,8 +16,8 @@ import java.io.*;
 public class webServer {
     private String content;
     private String userSearch;
+    private String user;
     private boolean check = false;
-    private boolean passwordCheck = false;
     public class ClientHandler implements Runnable {
         BufferedReader reader;
         Socket sock;
@@ -66,27 +66,49 @@ public class webServer {
         if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
             webpage = "Homepage.html";
         }
-        else if (userSearch.equals("/createaccount")) {
-            webpage = "Create_account.html";
+        else if (userSearch.equals("/createusername")) {
+            webpage = "Create_username.html";
             if (content != "") {
-                arr = processInfo.determineUserCreateInput(content);
-                if (Boolean.valueOf(arr.get(3)) == false) {
-                    File file = new File("src/main/resources/Create_account.html");
-                    Document html = Jsoup.parse(file, "UTF-8"); 
-                    html.select("input[name$=username]").attr("value", arr.get(0));
-                    html.select("input[name$=password]").attr("value", arr.get(1));
-                    html.select("input[name$=confirmpassword]").attr("value", arr.get(2));
-    
-                    FileWriter writer = new FileWriter(file);
-                    writer.write(html.toString());
-                    writer.flush();
-                    writer.close();
+                arr = processInfo.determineUsernameInput(content);
+                if (Boolean.valueOf(arr.get(1)) == false) {
+                    webpage = "Username_taken.html";
                 } else {
-                    //Successfully created account, redirect to success page, current page is temp
-                    webpage = "Homepage.html";
+                    user = arr.get(0);
+                    webpage = "Create_account.html";
                 }
             }
         }
+        else if (userSearch.equals("/createaccount")) {
+            webpage = "Create_account.html";
+            if (content != "") {
+                boolean temp = processInfo.passwordInput(content, user);
+                webpage = "Homepage.html";
+            }
+        }
+
+        //else if (userSearch.equals("/createaccount")) {
+        //    if (content != "") {
+        //        arr = processInfo.determineUserCreateInput(content);
+        //        if (Boolean.valueOf(arr.get(1)) == false) {
+        //            webpage = "Username_taken.html";
+                    //File file = new File("src/main/resources/Create_account.html");
+                    //Document html = Jsoup.parse(file, "UTF-8"); 
+                    //html.select("input[name$=username]").attr("value", arr.get(0));
+                    //html.select("input[name$=password]").attr("value", arr.get(1));
+                    //html.select("input[name$=confirmpassword]").attr("value", arr.get(2));
+                    //html.select("temp[name$=user]").attr("value", "Username taken");
+    
+                    //FileWriter writer = new FileWriter(file);
+                    //writer.write(html.toString());
+                    //writer.flush();
+                    //writer.close();
+        //        } else {
+        //            user = arr.get(0);
+                    //Successfully created account, redirect to success page, current page is temp
+        //            webpage = "Create_account.html";
+        //        }
+        //    }
+        //}
         else if (userSearch.equals("/login")) {
             webpage = "Login.html";
         }

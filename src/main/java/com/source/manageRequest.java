@@ -56,7 +56,7 @@ public class manageRequest {
                 //}
             }
         }
-        //printRequest(request);
+        printRequest(request);
         return content;
     }
     public static void printRequest(StringBuilder request) {

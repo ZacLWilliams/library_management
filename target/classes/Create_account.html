@@ -24,7 +24,7 @@
         }
         </style>
     </head>
-    <script>
+    <script type="text/javascript">
         function checkMatch(pass, confirmPass) {
             if (pass != confirmPass) {
                 document.getElementById("passMismatch").textContent="Passwords do not match";
@@ -34,7 +34,6 @@
         }
 
         function validateForm() {
-            let username = document.forms["form"]["username"].value;
             let pass = document.forms["form"]["password"].value;
             let confirmPass = document.forms["form"]["confirmpassword"].value;
             var regexNum = /[0-9]/;
@@ -71,15 +70,13 @@
                 document.getElementById("passMismatch").textContent="";
             }
         }
+        window.history.pushState({urlPath:'/page1'},"",'/createaccount')
     </script>
     <body>
         <h1>Create account</h1>
         <br><br><br><br>
         <div class="createaccount">
             <form name="form" action="" method="post" onsubmit="return validateForm()">
-            <p>Username</p>
-            <input type="text" id="username" name="username" value="" required>
-            <br>
             <p>Password</p>
             <input type="password" id="password" name="password" value="" required>
             <span id="short"></span><span id="number"></span><span id="special"></span>
@@ -88,7 +85,7 @@
             <input type="password" id="confirmpassword" name="confirmpassword" value="" required>
             <span id="passMismatch"></span>
             <br><br><br>
-            <button type="submit" class="submitinfo" name="submitbutton" value="userinput">Create account</button>
+            <button id="toggle" type="submit" class="submitinfo" name="submitbutton" value="userinput">Create account</button>
             </form>
         </div>
     </body>
