@@ -22,10 +22,21 @@ public class webServer {
 
         public void run() {
             String line;
+            String type;
+            String info;
+            String content = "";
+            int x = 0;
+            int i;
+            int intchar;
+            char c;
+            int contentLength = 0;
             //synchronized(this) {
                 try {
                     StringBuilder request = new StringBuilder();
                     line = reader.readLine();
+
+                    i = line.indexOf(" ");
+                    type = line.substring(0, i);
     
                     webServer.this.userSearch = cleanRequest(line);
                     check = true;
@@ -34,11 +45,32 @@ public class webServer {
                         //System.out.println("debug");
                         request.append(line + "\r\n");
                         line = reader.readLine();
+
+                        i = line.indexOf(" ");
+                        if (i < 0) {
+                            break;
+                        }
+                        info = line.substring(0, i);
+                        if (info.equals("Content-Length:")) {
+                            contentLength = Integer.valueOf(line.substring(i + 1));
+                            System.out.println(contentLength);
+                        }
                     }
                     //if ()
-                    printRequest(request);
+                    //printRequest(request);
+                    //String requestString = request.toString();
+                    System.out.println(type);
+                    if (type.equals("POST") && contentLength != 0) {
+                        while (x < contentLength) {
+                            x++;
+                            intchar = reader.read();
+                            c = (char) intchar;
+                            content = content + c;
+                        }
+                        System.out.println(content);
+                    }
     
-                } catch (Exception ex) {//ex.printStackTrace();
+                } catch (Exception ex) {ex.printStackTrace();
                     System.out.println("TEST2");}
             //}
         }
