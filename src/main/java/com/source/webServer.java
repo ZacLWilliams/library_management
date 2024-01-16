@@ -1,11 +1,11 @@
 package com.source;
 
 import java.net.*;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+//import java.util.ArrayList;
+//import java.util.stream.Collectors;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+//import org.jsoup.Jsoup;
+//import org.jsoup.nodes.Document;
 //import org.jsoup.nodes.Element;
 //import org.jsoup.select.Elements;
 
@@ -14,11 +14,9 @@ import java.io.*;
 
 //Relocate to new source file
 public class webServer {
-    private String webPage = null;
-    private String content;
+    private String webPage;
     private String userSearch;
     private boolean check = false;
-    private boolean userCheck = false;
     public class ClientHandler implements Runnable {
         BufferedReader reader;
         Socket sock;
@@ -32,6 +30,7 @@ public class webServer {
 
         public void run() {
             String line;
+            String content;
             //synchronized(wait) {
                 try {
                     StringBuilder request = new StringBuilder();
@@ -45,7 +44,7 @@ public class webServer {
                     //    webPage = determineWebpage(userSearch);
                     //}
 
-                    webPage = determineWebpage(userSearch);
+                    webPage = manageRequest.determineWebpage(userSearch, content);
                     //System.out.println(content);
 
                     check = true;
@@ -66,57 +65,7 @@ public class webServer {
         return line.replace(" HTTP/1.1", "");
     }
 
-    public String determineWebpage(String userSearch) throws IOException {
-        String webpage;
-        ArrayList<String> arr = new ArrayList<String>();
-        File file;
-        Document html; 
-        //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
-        if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
-            file = new File("src/main/resources/Homepage.html");
-            html = Jsoup.parse(file, "UTF-8"); 
-        }
-        else if (userSearch.equals("/createaccount")) {
-            file = new File("src/main/resources/Create_account.html");
-            html = Jsoup.parse(file, "UTF-8"); 
-            //webpage = "Create_account.html";
-            if (content != "") {
-                arr = processInfo.processData(content);
-                userCheck = checkUser.check_db(arr.get(0));
-                if (userCheck == false) {
-                    //File file = new File("src/main/resources/Create_account.html");
-                    //Document html = Jsoup.parse(file, "UTF-8"); 
-
-                    //html.select("span[name$=use]").attr("value", "Username taken");
-                    html.getElementById("user").text("Username taken");
-                    html.select("input[name$=username]").attr("value", arr.get(0));
-                    html.select("input[name$=password]").attr("value", arr.get(1));
-                    html.select("input[name$=confirmpassword]").attr("value", arr.get(2));
-
-                    //FileWriter writer = new FileWriter(file);
-                    //writer.write(html.toString());
-                    //writer.flush();
-                    //writer.close();
-
-                } else {
-                    file = new File("src/main/resources/Homepage.html");
-                    html = Jsoup.parse(file, "UTF-8"); 
-                    createUser.add_to_db(arr.get(0), arr.get(1));
-                }
-            }
-        }
-        else if (userSearch.equals("/login")) {
-            file = new File("src/main/resources/Login.html");
-            html = Jsoup.parse(file, "UTF-8"); 
-        }
-        else {
-            file = new File("src/main/resources/Homepage.html");
-            html = Jsoup.parse(file, "UTF-8"); 
-        }
-        return html.toString();
-    }
     public void go() {
-        //String webPage = null;
         // Make server socket
         try(ServerSocket serverSocket = new ServerSocket(4242)) {
             // Handle new messages
@@ -142,25 +91,6 @@ public class webServer {
                     //clientOutput.write(("Hello World").getBytes());
                     //clientOutput.flush();
 
-                    if (userCheck == true) {
-                        File file = new File("src/main/resources/Create_account.html");
-                        Document html = Jsoup.parse(file, "UTF-8"); 
-    
-                        //html.select("span[name$=use]").attr("value", "Username taken");
-                        html.getElementById("user").text("");
-                        html.select("input[name$=username]").attr("value", "");
-                        html.select("input[name$=password]").attr("value", "");
-                        html.select("input[name$=confirmpassword]").attr("value", "");
-    
-                        FileWriter writer = new FileWriter(file);
-                        writer.write(html.toString());
-                        writer.flush();
-                        writer.close();
-
-                        userCheck = false;
-                    }
-
-
                     PrintWriter out = new PrintWriter(client.getOutputStream());
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-type: text/html");
@@ -179,7 +109,6 @@ public class webServer {
                         }
 
                         check = false;
-                        webPage = null;
 
                         //out.println(s);
                         reader.close();

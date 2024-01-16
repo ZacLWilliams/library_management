@@ -34,10 +34,20 @@
         }
 
         function validateForm() {
+            let user = document.forms["form"]["username"].value;
             let pass = document.forms["form"]["password"].value;
             let confirmPass = document.forms["form"]["confirmpassword"].value;
             var regexNum = /[0-9]/;
             var regexSpecial = /[*._-]/;
+
+            if (user.length > 12) {
+                document.getElementById("long").textContent="Username cannot be more than 12 characters";
+                checkMatch(pass, confirmPass);
+                return false;
+            } else {
+                document.getElementById("long").textContent="";
+            }
+
 
             if (pass.length < 8) {
                 document.getElementById("short").textContent="Password must be at least 8 characters";
@@ -78,7 +88,8 @@
         <div class="createaccount">
             <form name="form" action="" method="post" onsubmit="return validateForm()">
                 <p>Username</p>
-                <input type="text" id="username" name="username" value="" required><span id="user"></span>
+                <input type="text" id="username" name="username" value="" required>
+                <span id="long"></span><span id="user"></span>
                 <br>
                 <p>Password</p>
                 <input type="password" id="password" name="password" value="" required>
