@@ -41,11 +41,11 @@ public class webServer {
 
                     content = manageRequest.processRequest(reader, request, line);
 
-                    while (webPage == null) {
-                        webPage = determineWebpage(userSearch);
-                    }
+                    //while (webPage == null) {
+                    //    webPage = determineWebpage(userSearch);
+                    //}
 
-                    //webPage = determineWebpage(userSearch);
+                    webPage = determineWebpage(userSearch);
                     //System.out.println(content);
 
                     check = true;
@@ -69,18 +69,23 @@ public class webServer {
     public String determineWebpage(String userSearch) throws IOException {
         String webpage;
         ArrayList<String> arr = new ArrayList<String>();
+        File file;
+        Document html; 
         //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
         if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
-            webpage = "Homepage.html";
+            file = new File("src/main/resources/Homepage.html");
+            html = Jsoup.parse(file, "UTF-8"); 
         }
         else if (userSearch.equals("/createaccount")) {
-            webpage = "Create_account.html";
+            file = new File("src/main/resources/Create_account.html");
+            html = Jsoup.parse(file, "UTF-8"); 
+            //webpage = "Create_account.html";
             if (content != "") {
                 arr = processInfo.processData(content);
                 userCheck = checkUser.check_db(arr.get(0));
                 if (userCheck == false) {
-                    File file = new File("src/main/resources/Create_account.html");
-                    Document html = Jsoup.parse(file, "UTF-8"); 
+                    //File file = new File("src/main/resources/Create_account.html");
+                    //Document html = Jsoup.parse(file, "UTF-8"); 
 
                     //html.select("span[name$=use]").attr("value", "Username taken");
                     html.getElementById("user").text("Username taken");
@@ -88,24 +93,27 @@ public class webServer {
                     html.select("input[name$=password]").attr("value", arr.get(1));
                     html.select("input[name$=confirmpassword]").attr("value", arr.get(2));
 
-                    FileWriter writer = new FileWriter(file);
-                    writer.write(html.toString());
-                    writer.flush();
-                    writer.close();
+                    //FileWriter writer = new FileWriter(file);
+                    //writer.write(html.toString());
+                    //writer.flush();
+                    //writer.close();
 
                 } else {
+                    file = new File("src/main/resources/Homepage.html");
+                    html = Jsoup.parse(file, "UTF-8"); 
                     createUser.add_to_db(arr.get(0), arr.get(1));
-                    webpage = "Homepage.html";
                 }
             }
         }
         else if (userSearch.equals("/login")) {
-            webpage = "Login.html";
+            file = new File("src/main/resources/Login.html");
+            html = Jsoup.parse(file, "UTF-8"); 
         }
         else {
-            webpage = "Homepage.html";
+            file = new File("src/main/resources/Homepage.html");
+            html = Jsoup.parse(file, "UTF-8"); 
         }
-        return webpage;
+        return html.toString();
     }
     public void go() {
         //String webPage = null;
@@ -160,13 +168,21 @@ public class webServer {
                     
                     //Make sure we have processed user's input before reloading site
                     if (check == true) {
-                        InputStream in = this.getClass().getClassLoader().getResourceAsStream(webPage);
-                        String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
+                        //InputStream in = this.getClass().getClassLoader().getResourceAsStream(webPage);
+                        //String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
+                        Reader inputString = new StringReader(webPage);
+                        BufferedReader reader = new BufferedReader(inputString);
+                        String line = reader.readLine();
+                        while (line != null) {
+                            out.println(line);
+                            line = reader.readLine();
+                        }
 
                         check = false;
                         webPage = null;
 
-                        out.println(s);
+                        //out.println(s);
+                        reader.close();
                         out.close();
                         out.flush();
                     
