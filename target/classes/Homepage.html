@@ -50,16 +50,22 @@
             margin-top:0;
             margin-bottom:0;
         }
-        h1 {
+        /*h1 {
             background: #f2f2f2;
             margin-top:0;
+        }*/
+        .heading {
+            position: relative;
+            left: 5%;
         }
         nav {
             float: right;
         }
-        /* h2 {
+        .heading_2 {
+            position: relative;
             margin-bottom:0;
-        }*/
+            left: 6.4%;
+        }
         </style>
         <script>
             function test() {
@@ -70,17 +76,18 @@
     <body>
         <nav>
             <a href="./createaccount">Create account</a>
-            <a>&emsp;</a>
             <a href="./login">Login</a>
         </nav>
+        <br>
         <!-- <p align="right">
             <a href="http://172.17.201.68">Create account</a>
             <a>&emsp;</a>
             <a href="http://172.17.201.68">Login</a> -->
         </p>
-        <h1>&emsp;&emsp;Badreads</h1>
+        <div class="heading"><h1>Badreads</h1></div>
+        <br>
         <div>
-            <h2>&emsp;&emsp;&emsp;&emsp;Search books</h2>
+            <div class="heading_2"><h2>Search books</h2></div>
             <form action="response" method="GET">
             <div class="wrap">
                 <div class="search">
