@@ -6,19 +6,19 @@ import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+//import org.jsoup.nodes.Element;
+//import org.jsoup.select.Elements;
 
 import java.io.*;
 //import java.util.*;
 
 //Relocate to new source file
 public class webServer {
-    private String webPage;
+    private String webPage = null;
     private String content;
     private String userSearch;
-    private String user;
     private boolean check = false;
+    private boolean userCheck = false;
     public class ClientHandler implements Runnable {
         BufferedReader reader;
         Socket sock;
@@ -32,7 +32,7 @@ public class webServer {
 
         public void run() {
             String line;
-            //synchronized(this) {
+            //synchronized(wait) {
                 try {
                     StringBuilder request = new StringBuilder();
                     line = reader.readLine();
@@ -41,7 +41,11 @@ public class webServer {
 
                     content = manageRequest.processRequest(reader, request, line);
 
-                    webPage = determineWebpage(userSearch);
+                    while (webPage == null) {
+                        webPage = determineWebpage(userSearch);
+                    }
+
+                    //webPage = determineWebpage(userSearch);
                     //System.out.println(content);
 
                     check = true;
@@ -71,16 +75,15 @@ public class webServer {
         }
         else if (userSearch.equals("/createaccount")) {
             webpage = "Create_account.html";
-            System.out.println("1");
             if (content != "") {
-                System.out.println("2");
                 arr = processInfo.processData(content);
-                if (checkUser.check_db(arr.get(0)) == false) {
-                    System.out.println("3");
+                userCheck = checkUser.check_db(arr.get(0));
+                if (userCheck == false) {
                     File file = new File("src/main/resources/Create_account.html");
                     Document html = Jsoup.parse(file, "UTF-8"); 
+
                     //html.select("span[name$=use]").attr("value", "Username taken");
-                    html.getElementById("user").append("Username taken");
+                    html.getElementById("user").text("Username taken");
                     html.select("input[name$=username]").attr("value", arr.get(0));
                     html.select("input[name$=password]").attr("value", arr.get(1));
                     html.select("input[name$=confirmpassword]").attr("value", arr.get(2));
@@ -89,9 +92,8 @@ public class webServer {
                     writer.write(html.toString());
                     writer.flush();
                     writer.close();
-                    //webpage = "Username_taken.html";
+
                 } else {
-                    System.out.println("4");
                     createUser.add_to_db(arr.get(0), arr.get(1));
                     webpage = "Homepage.html";
                 }
@@ -105,8 +107,8 @@ public class webServer {
         }
         return webpage;
     }
-
     public void go() {
+        //String webPage = null;
         // Make server socket
         try(ServerSocket serverSocket = new ServerSocket(4242)) {
             // Handle new messages
@@ -132,6 +134,24 @@ public class webServer {
                     //clientOutput.write(("Hello World").getBytes());
                     //clientOutput.flush();
 
+                    if (userCheck == true) {
+                        File file = new File("src/main/resources/Create_account.html");
+                        Document html = Jsoup.parse(file, "UTF-8"); 
+    
+                        //html.select("span[name$=use]").attr("value", "Username taken");
+                        html.getElementById("user").text("");
+                        html.select("input[name$=username]").attr("value", "");
+                        html.select("input[name$=password]").attr("value", "");
+                        html.select("input[name$=confirmpassword]").attr("value", "");
+    
+                        FileWriter writer = new FileWriter(file);
+                        writer.write(html.toString());
+                        writer.flush();
+                        writer.close();
+
+                        userCheck = false;
+                    }
+
 
                     PrintWriter out = new PrintWriter(client.getOutputStream());
                     out.println("HTTP/1.1 200 OK");
@@ -144,22 +164,13 @@ public class webServer {
                         String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
 
                         check = false;
+                        webPage = null;
 
                         out.println(s);
                         out.close();
                         out.flush();
                     
                         client.close();
-
-                        //if (webPage.equals("Create_account.html")) {
-                        //    File file = new File("src/main/resources/Create_account.html");
-                        //    Document html = Jsoup.parse(file, "UTF-8"); 
-                        //    Element test = html.select("p").first();
-                        //    test.text("Username");
-
-                            //OutputStream outhtml = new FileOutputStream(file);
-                            //outhtml.close();
-                        //}
                     }
                 } catch(IOException ex) {
                     ex.printStackTrace();
