@@ -48,6 +48,21 @@
                 document.getElementById("long").textContent="";
             }
 
+            if (user.length < 3) {
+                document.getElementById("long").textContent="Username must be at least 3 characters";
+                checkMatch(pass, confirmPass);
+                return false;
+            } else {
+                document.getElementById("long").textContent="";
+            }
+
+            if (pass.length > 14) {
+                document.getElementById("short").textContent="Password cannot be more than 14 characters";
+                checkMatch(pass, confirmPass);
+                return false;
+            } else {
+                document.getElementById("short").textContent="";
+            }
 
             if (pass.length < 8) {
                 document.getElementById("short").textContent="Password must be at least 8 characters";

@@ -17,9 +17,12 @@ public class webServer {
     private String webPage;
     private String userSearch;
     private boolean check = false;
+
+    // Handle thread of client
     public class ClientHandler implements Runnable {
         BufferedReader reader;
         Socket sock;
+        // Connect to client socket and get buffered read of http request
         public ClientHandler(Socket clientSocket) {
             try {
                 sock = clientSocket;
@@ -35,15 +38,18 @@ public class webServer {
                 try {
                     StringBuilder request = new StringBuilder();
                     line = reader.readLine();
-    
-                    webServer.this.userSearch = cleanRequest(line);
+                    
+                    // Get user requested url, userSearch
+                    webServer.this.userSearch = cleanRequestHead(line);
 
+                    // Parse request to get content if it exists
                     content = manageRequest.processRequest(reader, request, line);
 
                     //while (webPage == null) {
                     //    webPage = determineWebpage(userSearch);
                     //}
-
+                    
+                    // Decide webpage based on user input, so both url and user entered content
                     webPage = manageRequest.determineWebpage(userSearch, content);
                     //System.out.println(content);
 
@@ -59,7 +65,7 @@ public class webServer {
         server.go();
     }
 
-    public String cleanRequest(String line) {
+    public String cleanRequestHead(String line) {
         line = line.replace("GET ", "");
         line = line.replace("POST ", "");
         return line.replace(" HTTP/1.1", "");
@@ -68,12 +74,15 @@ public class webServer {
     public void go() {
         // Make server socket
         try(ServerSocket serverSocket = new ServerSocket(4242)) {
-            // Handle new messages
+            // Run server infinitely
             while(true) {
                 // Handle new incoming messages
                 try(Socket client = serverSocket.accept()) {
                     //System.out.println("Debug:" + client.toString());
                     //System.out.println(client.isClosed());
+
+                    // Create and run thread until it is complete
+                    // Use check to prevent repeat requests from same user
                     if (check == false) {
                         Thread t = new Thread(new ClientHandler(client));
                         t.start();
@@ -92,16 +101,22 @@ public class webServer {
                     //clientOutput.flush();
 
                     PrintWriter out = new PrintWriter(client.getOutputStream());
+
+                    // Send success to client
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-type: text/html");
                     out.println("\r\n");
                     
-                    //Make sure we have processed user's input before reloading site
+                    // Make sure we have processed user's input before reloading site
                     if (check == true) {
                         //InputStream in = this.getClass().getClassLoader().getResourceAsStream(webPage);
                         //String s = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
+
+                        // Convert html document to input string so it can be buffered read
                         Reader inputString = new StringReader(webPage);
                         BufferedReader reader = new BufferedReader(inputString);
+
+                        // Send html to client line by line
                         String line = reader.readLine();
                         while (line != null) {
                             out.println(line);

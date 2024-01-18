@@ -36,6 +36,7 @@ public class readData {
 			
 			List<String[]> allData = csvReader.readAll();
 
+			// Transfer csv data into book object
 			for (String[] tempBook : allData) {  
 
 				String[] tempUrls;
@@ -50,6 +51,7 @@ public class readData {
 		} 
 	}
 
+	// Add list of book objects to database
 	public static void add_to_db(ArrayList<Book> bookList) {
 
 		String sql = "INSERT IGNORE INTO book VALUES (?, NULL, ?, ?, ?, ?)";
@@ -72,7 +74,7 @@ public class readData {
 			e.printStackTrace();
 		}
 	}
-
+	// Add image urls to child table
 	public static void add_images_to_db(ArrayList<Book> bookList) {
 
 		String sql = "INSERT IGNORE INTO images VALUES (?, ?, ?, ?)";

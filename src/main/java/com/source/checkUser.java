@@ -13,7 +13,7 @@ public class checkUser {
 	private static final String PASS = "";
 
     public static boolean check_db(String username) {
-        // true means username and password were successfully added to the database
+        // true means the username is available
         // false means username already exists
 
         ResultSet usernameResult = null;
@@ -35,7 +35,7 @@ public class checkUser {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        // true means username and password were successfully added to the database
+        // true means the username is available
         return true;
     }
 }
