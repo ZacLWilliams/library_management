@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class createUser {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "Sapiens789-";
+	private static final String PASS = "";
 
     public static boolean add_to_db(String username, String pass) {
         // true means username and password were successfully added to the database
