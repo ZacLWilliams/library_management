@@ -33,7 +33,7 @@ public class webServer {
 
         public void run() {
             String line;
-            String content;
+            //String content;
             //synchronized(wait) {
                 try {
                     StringBuilder request = new StringBuilder();
@@ -42,15 +42,18 @@ public class webServer {
                     // Get user requested url, userSearch
                     webServer.this.userSearch = cleanRequestHead(line);
 
+                    // Process request to determine webpage
+                    webPage = manageRequest.processRequest(reader, request, line, userSearch);
+
                     // Parse request to get content if it exists
-                    content = manageRequest.processRequest(reader, request, line);
+                    //content = manageRequest.processRequest(reader, request, line);
 
                     //while (webPage == null) {
                     //    webPage = determineWebpage(userSearch);
                     //}
                     
                     // Decide webpage based on user input, so both url and user entered content
-                    webPage = manageRequest.determineWebpage(userSearch, content);
+                    //webPage = manageRequest.determineWebpage(userSearch, content);
                     //System.out.println(content);
 
                     check = true;

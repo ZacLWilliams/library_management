@@ -33,6 +33,14 @@
             }
         }
 
+        function sendPost(data) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(form.method, form.action, true);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            xhr.send(JSON.stringify(data));
+            return;
+        }
+
         function validateForm() {
             let user = document.forms["form"]["username"].value;
             let pass = document.forms["form"]["password"].value;
@@ -94,6 +102,10 @@
             } else {
                 document.getElementById("passMismatch").textContent="";
             }
+
+            //let data = {username:user, password:pass, confirm:confirmPass};
+
+            //sendPost(data);
         }
         //window.history.pushState({urlPath:'/page1'},"",'/createaccount')
     </script>

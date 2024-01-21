@@ -8,7 +8,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class manageRequest {
-    public static String processRequest(BufferedReader reader, StringBuilder request, String line) throws Exception {
+    //private String content;
+    public static String processRequest(BufferedReader reader, StringBuilder request, String line, String userSearch) throws Exception {
         String type;
         String info;
         String content = "";
@@ -70,7 +71,7 @@ public class manageRequest {
             }
         }
         printRequest(request);
-        return content;
+        return determineWebpage(userSearch, content);
     }
     public static void printRequest(StringBuilder request) {
         System.out.println("--REQUEST--");
