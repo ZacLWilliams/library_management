@@ -5,12 +5,6 @@ package com.source;
 import org.apache.commons.lang3.StringUtils;
 
 public class processInfo {
-    // Redundant ATM
-    public static boolean dataInput(String content, String username) {
-        String data[];
-        data = StringUtils.substringsBetween(content, "=", "&");
-        return createUser.add_to_db(username, data[0]);
-    }
     // Process user input for account creation
     public static String[] processData(String content) {
         //ArrayList<String> arr = new ArrayList<String>();

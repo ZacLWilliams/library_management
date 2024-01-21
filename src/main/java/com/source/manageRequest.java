@@ -122,7 +122,7 @@ public class manageRequest {
                 } else {
                     file = new File("src/main/resources/Homepage.html");
                     html = Jsoup.parse(file, "UTF-8"); 
-                    createUser.add_to_db(data[0], data[1]);
+                    checkUser.check_db(data[0], data[1]);
                 }
             }
         }

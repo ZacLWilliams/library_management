@@ -38,4 +38,23 @@ public class checkUser {
         // true means the username is available
         return true;
     }
+
+    // Static polymorphic method that adds data to database
+    public static void check_db(String username, String pass) {
+        User user = new User(username, pass);
+
+        // Insert username and password into database
+        String sql2 = "INSERT INTO user (username, password) VALUES (?, ?)";
+		try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+        PreparedStatement statement2 = con.prepareStatement(sql2)) {
+            
+            // Set string and execute sql command
+            statement2.setString(1, user.getUsername());
+            statement2.setString(2, user.getPassword());
+            statement2.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
 }
