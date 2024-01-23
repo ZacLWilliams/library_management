@@ -9,10 +9,12 @@ import org.jsoup.nodes.Document;
 
 public class manageRequest {
     //private String content;
-    public static String processRequest(BufferedReader reader, StringBuilder request, String line) throws Exception {
+    public static String[] processRequest(BufferedReader reader, StringBuilder request, String line) throws Exception {
+        String[] information = new String[2];
         String type;
         String info;
         String content = "";
+        String cookieId = null;
         //String reservedVal = "";
         int contentLength = 0;
         int i;
@@ -46,6 +48,9 @@ public class manageRequest {
                 //Get the value for content length
                 contentLength = Integer.valueOf(line.substring(i + 1));
             }
+            if (info.equals("Cookie:")) {
+                cookieId = line.substring(i + 1);
+            }
         }
 
         if (type.equals("POST") && contentLength != 0) {
@@ -71,7 +76,8 @@ public class manageRequest {
             }
         }
         printRequest(request);
-        return content;
+        information[0] = content; information[1] = cookieId;
+        return information;
     }
     public static void printRequest(StringBuilder request) {
         System.out.println("--REQUEST--");
@@ -79,7 +85,7 @@ public class manageRequest {
     }
 
     // Check url values to decide webpage
-    public static String determineWebpage(String userSearch, String[] data) throws IOException {
+    public static String determineWebpage(String userSearch, String[] data, int cookieId, userId user) throws IOException {
         //ArrayList<String> arr = new ArrayList<String>();
         File file;
         Document html; 
@@ -90,6 +96,11 @@ public class manageRequest {
         if (userSearch == null || userSearch.equals("/") || userSearch.equals("/response?search=")) {
             file = new File("src/main/resources/Homepage.html");
             html = Jsoup.parse(file, "UTF-8"); 
+            if (cookieId != 0) {
+                html.getElementById("createaccount").text("");
+                html.getElementById("login").text("");
+                html.getElementById("profile").text("Hello " + user.getUsername() + "!");
+            }
         }
         else if (userSearch.equals("/createaccount")) {
             file = new File("src/main/resources/Create_account.html");
@@ -138,13 +149,26 @@ public class manageRequest {
                 }else {
                     file = new File("src/main/resources/Homepage.html");
                     html = Jsoup.parse(file, "UTF-8");
+                    html.getElementById("createaccount").text("");
+                    html.getElementById("login").text("");
+                    html.getElementById("profile").text("Hello " + user.getUsername() + "!");
                     // Need to add profile
                 }
             }
         }
+        else if (userSearch.equals("/profile")) {
+            file = new File("src/main/resources/Profile.html");
+            html = Jsoup.parse(file, "UTF-8");
+        }
         else {
             file = new File("src/main/resources/Homepage.html");
             html = Jsoup.parse(file, "UTF-8"); 
+
+            if (cookieId != 0) {
+                html.getElementById("createaccount").text("");
+                html.getElementById("login").text("");
+                html.getElementById("profile").text("Hello " + user.getUsername() + "!");
+            }
         }
         return html.toString();
     }

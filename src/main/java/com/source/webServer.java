@@ -18,7 +18,8 @@ public class webServer {
     private String userSearch;
     private boolean check = false;
     private boolean logincheck = false;
-    private int cookieId;
+    private String cookieId;
+    userId user;
 
     // Handle thread of client
     public class ClientHandler implements Runnable {
@@ -35,11 +36,12 @@ public class webServer {
 
         public void run() {
             String line;
-            String content;
-            String data[] = null;
+            String[] information;
+            String[] data = null;
             //String content;
             //synchronized(wait) {
                 try {
+                    int cookieIdInt = 0;
                     StringBuilder request = new StringBuilder();
                     line = reader.readLine();
                     
@@ -47,20 +49,28 @@ public class webServer {
                     webServer.this.userSearch = cleanRequestHead(line);
 
                     // Process request to determine webpage
-                    content = manageRequest.processRequest(reader, request, line);
+                    information = manageRequest.processRequest(reader, request, line);
 
-                    if (content != "") {
-                        data = processInfo.processData(content);
-                        System.out.println(checkUser.check_user_pass(data[0], data[1]));
-                        System.out.println(userSearch);
+                    if (information[1] != null) {
+                        cookieId = information[1];
+                        cookieIdInt = Integer.valueOf(processInfo.processData(cookieId)[0]);
+
+                        String[] temp = processInfo.processData(cookieId);
+
+                        user = new userId(temp[0], temp[1], temp[2]);
+                    }
+
+                    if (information[0] != "") {
+                        data = processInfo.processData(information[0]);
                         if (userSearch.equals("/login") == true && checkUser.check_user_pass(data[0], data[1]) == true) {
                             logincheck = true;
-                            cookieId = checkUser.getCookieId(data[0], data[1]);
-                            System.out.println("test");
+                            cookieIdInt = checkUser.getCookieId(data[0], data[1]);
+                            cookieId = "id=" + Integer.toString(cookieIdInt) + "&" + "username=" + data[0] + "&" + "password=" + data[1] + "&";
+                            user = new userId(Integer.toString(cookieIdInt), data[0], data[1]);
                         }
                     }
                     
-                    webPage = manageRequest.determineWebpage(userSearch, data);
+                    webPage = manageRequest.determineWebpage(userSearch, data, cookieIdInt, user);
 
                     // Parse request to get content if it exists
                     //content = manageRequest.processRequest(reader, request, line);
@@ -126,8 +136,8 @@ public class webServer {
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-type: text/html");
                     if (logincheck == true) {
+                        System.out.println(cookieId);
                         out.println("Set-Cookie: " + cookieId + ";path=/");
-                        System.out.println("test");
                     }
                     out.println("\r\n");
 
