@@ -39,6 +39,34 @@ public class checkUser {
         return true;
     }
 
+    public static boolean check_user_pass(String username, String password) {
+        // True mean username and password correct
+        // false means either value are incorrect
+
+        ResultSet result = null;
+
+        //Check to see if user input fulfils requirements
+        String sql1 = "SELECT EXISTS (SELECT * FROM user WHERE username = ? AND password = ?)";
+		try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+		PreparedStatement statement1 = con.prepareStatement(sql1);) {
+
+			statement1.setString(1, username);
+            statement1.setString(2, password);
+
+			result = statement1.executeQuery();
+            result.next();
+            
+            if (result.getInt(1) == 1) {
+                // True mean username and password correct
+                return true;
+            } 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        // Could not find match
+        return false;
+    }
+
     // Static polymorphic method that adds data to database
     public static void check_db(String username, String pass) {
         User user = new User(username, pass);

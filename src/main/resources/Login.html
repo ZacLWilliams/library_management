@@ -28,13 +28,16 @@
         <h1>Login</h1>
         <br><br><br><br>
         <div class="createaccount">
-            <p>Username</p>
-            <input type="text" id="username" name="username">
-            <br>
-            <p>Password</p>
-            <input type="password" id="password" name="password">
-            <br><br><br>
-            <button type="submit" class="submitinfo" formmmethod="post">Login</button>
+            <form name="form" action="" method="post">
+                <p>Username</p>
+                <input type="text" id="username" name="username">
+                <span id="user"></span>
+                <br>
+                <p>Password</p>
+                <input type="password" id="password" name="password">
+                <br><br><br>
+                <button id="toggle" type="submit" class="submitinfo" name="submitbutton" value="userinput">Login</button>
+            </form>
         </div>
     </body>
 </html>

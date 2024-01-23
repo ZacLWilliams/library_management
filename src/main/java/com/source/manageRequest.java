@@ -122,6 +122,7 @@ public class manageRequest {
                 } else {
                     file = new File("src/main/resources/Homepage.html");
                     html = Jsoup.parse(file, "UTF-8"); 
+                    // Polymorphic add to database
                     checkUser.check_db(data[0], data[1]);
                 }
             }
@@ -129,6 +130,22 @@ public class manageRequest {
         else if (userSearch.equals("/login")) {
             file = new File("src/main/resources/Login.html");
             html = Jsoup.parse(file, "UTF-8"); 
+
+            if (content != "") {
+                data = processInfo.processData(content);
+
+                // Could not log into account
+                if (checkUser.check_user_pass(data[0], data[1]) == false) {
+                    html.getElementById("user").text("Username or password does not exist");
+                    html.select("input[name$=username]").attr("value", data[0]);
+                    html.select("input[name$=password]").attr("value", data[1]);
+                }
+                else {
+                    file = new File("src/main/resources/Homepage.html");
+                    html = Jsoup.parse(file, "UTF-8");
+                    // Need to add profile
+                }
+            }
         }
         else {
             file = new File("src/main/resources/Homepage.html");
