@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class checkUser {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "";
+	private static final String PASS = "Sapiens789-";
 
     public static boolean check_db(String username) {
         // true means the username is available
@@ -38,6 +38,26 @@ public class checkUser {
         // true means the username is available
         return true;
     }
+
+    public static int getCookieId(String username, String password) {
+        String sql = "SELECT user_id FROM user WHERE username = ? AND password = ?";
+
+        ResultSet result = null;
+
+        try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+		PreparedStatement statement = con.prepareStatement(sql);) {
+
+            statement.setString(1, username);
+            statement.setString(2, password);
+            
+            result = statement.executeQuery();
+            result.next();
+            return result.getInt("user_id");
+        } catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return 0;
+    } 
 
     public static boolean check_user_pass(String username, String password) {
         // True mean username and password correct

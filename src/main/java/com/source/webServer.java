@@ -17,6 +17,8 @@ public class webServer {
     private String webPage;
     private String userSearch;
     private boolean check = false;
+    private boolean logincheck = false;
+    private int cookieId;
 
     // Handle thread of client
     public class ClientHandler implements Runnable {
@@ -33,6 +35,8 @@ public class webServer {
 
         public void run() {
             String line;
+            String content;
+            String data[] = null;
             //String content;
             //synchronized(wait) {
                 try {
@@ -43,7 +47,18 @@ public class webServer {
                     webServer.this.userSearch = cleanRequestHead(line);
 
                     // Process request to determine webpage
-                    webPage = manageRequest.processRequest(reader, request, line, userSearch);
+                    content = manageRequest.processRequest(reader, request, line);
+
+                    if (content != "") {
+                        data = processInfo.processData(content);
+                        if (userSearch.equals("/login") && checkUser.check_user_pass(data[0], data[1]) == true) {
+                            logincheck = true;
+                            cookieId = checkUser.getCookieId(data[0], data[1]);
+                            System.out.println(cookieId);
+                        }
+                    }
+                    
+                    webPage = manageRequest.determineWebpage(userSearch, data);
 
                     // Parse request to get content if it exists
                     //content = manageRequest.processRequest(reader, request, line);
@@ -108,7 +123,12 @@ public class webServer {
                     // Send success to client
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-type: text/html");
+                    if (logincheck == true) {
+                        out.println("Set-Cookie: " + ";path=/");
+                    }
                     out.println("\r\n");
+
+                    logincheck = false;
                     
                     // Make sure we have processed user's input before reloading site
                     if (check == true) {

@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 
 public class manageRequest {
     //private String content;
-    public static String processRequest(BufferedReader reader, StringBuilder request, String line, String userSearch) throws Exception {
+    public static String processRequest(BufferedReader reader, StringBuilder request, String line) throws Exception {
         String type;
         String info;
         String content = "";
@@ -71,7 +71,7 @@ public class manageRequest {
             }
         }
         printRequest(request);
-        return determineWebpage(userSearch, content);
+        return content;
     }
     public static void printRequest(StringBuilder request) {
         System.out.println("--REQUEST--");
@@ -79,11 +79,11 @@ public class manageRequest {
     }
 
     // Check url values to decide webpage
-    public static String determineWebpage(String userSearch, String content) throws IOException {
+    public static String determineWebpage(String userSearch, String[] data) throws IOException {
         //ArrayList<String> arr = new ArrayList<String>();
-        String data[];
         File file;
         Document html; 
+        //String data[] = null;
         //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
         
         // Pick the html file to use for each webpage
@@ -97,8 +97,7 @@ public class manageRequest {
             //webpage = "Create_account.html";
 
             // For this instance we have a dynamic webpage based on client requests so html file must be edited
-            if (content != "") {
-                data = processInfo.processData(content);
+            if (data != null) {
                 // This means the username has already been taken in the database
                 if (checkUser.check_db(data[0]) == false) {
                     //File file = new File("src/main/resources/Create_account.html");
@@ -130,17 +129,13 @@ public class manageRequest {
         else if (userSearch.equals("/login")) {
             file = new File("src/main/resources/Login.html");
             html = Jsoup.parse(file, "UTF-8"); 
-
-            if (content != "") {
-                data = processInfo.processData(content);
-
-                // Could not log into account
+            
+            if (data != null) {
                 if (checkUser.check_user_pass(data[0], data[1]) == false) {
-                    html.getElementById("user").text("Username or password does not exist");
-                    html.select("input[name$=username]").attr("value", data[0]);
+                    html.getElementById("user").text("Username or password does not exist");  
+                    html.select("input[name$=username]").attr("value", data[0]);  
                     html.select("input[name$=password]").attr("value", data[1]);
-                }
-                else {
+                }else {
                     file = new File("src/main/resources/Homepage.html");
                     html = Jsoup.parse(file, "UTF-8");
                     // Need to add profile
