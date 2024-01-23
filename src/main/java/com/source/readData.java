@@ -12,7 +12,7 @@ public class readData {
 	private static ArrayList<Book> bookList = new ArrayList<Book>();
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "Sapiens789-";
+	private static final String PASS = "";
 
 	public static void main(String[] args) {
     	String file = "books.csv";
