@@ -51,10 +51,12 @@ public class webServer {
 
                     if (content != "") {
                         data = processInfo.processData(content);
-                        if (userSearch.equals("/login") && checkUser.check_user_pass(data[0], data[1]) == true) {
+                        System.out.println(checkUser.check_user_pass(data[0], data[1]));
+                        System.out.println(userSearch);
+                        if (userSearch.equals("/login") == true && checkUser.check_user_pass(data[0], data[1]) == true) {
                             logincheck = true;
                             cookieId = checkUser.getCookieId(data[0], data[1]);
-                            System.out.println(cookieId);
+                            System.out.println("test");
                         }
                     }
                     
@@ -124,7 +126,8 @@ public class webServer {
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-type: text/html");
                     if (logincheck == true) {
-                        out.println("Set-Cookie: " + ";path=/");
+                        out.println("Set-Cookie: " + cookieId + ";path=/");
+                        System.out.println("test");
                     }
                     out.println("\r\n");
 
