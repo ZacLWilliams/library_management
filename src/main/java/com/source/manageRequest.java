@@ -87,6 +87,7 @@ public class manageRequest {
     // Check url values to decide webpage
     public static String determineWebpage(String userSearch, String[] data, int cookieId, userId user) throws IOException {
         //ArrayList<String> arr = new ArrayList<String>();
+        String search;
         File file;
         Document html; 
         //String data[] = null;
@@ -160,6 +161,11 @@ public class manageRequest {
             file = new File("src/main/resources/Profile.html");
             html = Jsoup.parse(file, "UTF-8");
         }
+        else if ((search = checkSearch(userSearch)) != "") {
+            checkBook.processWords(search);
+            file = new File("src/main/resources/Search.html");
+            html = Jsoup.parse(file, "UTF-8");
+        }
         else {
             file = new File("src/main/resources/Homepage.html");
             html = Jsoup.parse(file, "UTF-8"); 
@@ -171,5 +177,19 @@ public class manageRequest {
             }
         }
         return html.toString();
+    }
+
+    public static String checkSearch(String userSearch) {
+        String search = "";
+
+        for (int i = 0; i < userSearch.length(); i++) {
+            char c = userSearch.charAt(i);
+            String character = c + "";
+            if (character.equals("=")) {
+                search = userSearch.substring(i + 1);
+                break;
+            }
+        }
+        return search;
     }
 }
