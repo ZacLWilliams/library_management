@@ -130,7 +130,7 @@ public class manageRequest {
 
                 // In this instance the username is available so we will add the username and password to the database
                 } else {
-                    file = new File("src/main/resources/Homepage.html");
+                    file = new File("src/main/resources/Success_create.html");
                     html = Jsoup.parse(file, "UTF-8"); 
                     // Polymorphic add to database
                     checkUser.check_db(data[0], data[1]);
@@ -147,11 +147,11 @@ public class manageRequest {
                     html.select("input[name$=username]").attr("value", data[0]);  
                     html.select("input[name$=password]").attr("value", data[1]);
                 }else {
-                    file = new File("src/main/resources/Homepage.html");
+                    file = new File("src/main/resources/Success.html");
                     html = Jsoup.parse(file, "UTF-8");
-                    html.getElementById("createaccount").text("");
-                    html.getElementById("login").text("");
-                    html.getElementById("profile").text("Hello " + user.getUsername() + "!");
+                    //html.getElementById("createaccount").text("");
+                    //html.getElementById("login").text("");
+                    //html.getElementById("profile").text("Hello " + user.getUsername() + "!");
                     // Need to add profile
                 }
             }

@@ -136,7 +136,7 @@ public class webServer {
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-type: text/html");
                     if (logincheck == true) {
-                        System.out.println(cookieId);
+                        //System.out.println(cookieId);
                         out.println("Set-Cookie: " + cookieId + ";path=/");
                     }
                     out.println("\r\n");
