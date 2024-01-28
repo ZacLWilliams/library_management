@@ -162,7 +162,7 @@ public class manageRequest {
             html = Jsoup.parse(file, "UTF-8");
         }
         else if ((search = checkSearch(userSearch)) != "") {
-            checkBook.processWords(search);
+            checkBook.getBooks(search);
             file = new File("src/main/resources/Search.html");
             html = Jsoup.parse(file, "UTF-8");
         }
