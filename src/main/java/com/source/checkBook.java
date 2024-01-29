@@ -1,4 +1,5 @@
 package com.source;
+import java.util.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,9 +12,9 @@ import java.sql.SQLException;
 public class checkBook {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "Sapiens789-";
+	private static final String PASS = "";
 
-    public static void getBooks(String search) {
+    public static ArrayList<fullBook> getBooks(String search) {
         ArrayList<fullBook> bookList = new ArrayList<fullBook>();
         String sql = "SELECT * FROM book WHERE" + processWords(search);
         String sql2 = "SELECT * FROM images WHERE isbn = ?";
@@ -27,11 +28,9 @@ public class checkBook {
             rs = statement.executeQuery(sql);
 
             while (rs.next()) {
-                System.out.println(rs.getString("isbn"));
                 statement2.setString(1, rs.getString("isbn"));
                 resultImages = statement2.executeQuery();
                 resultImages.next();
-                System.out.println(resultImages.getString("image_s"));
 
                 String[] images = new String[] {resultImages.getString("image_s"), resultImages.getString("image_m"),
                 resultImages.getString("image_l")};
@@ -41,13 +40,14 @@ public class checkBook {
 
                 bookList.add(b);
             }
-            System.out.println(bookList.get(0).getYear());
 
             //return result.getInt("user_id");
         } catch (SQLException e) {
 			e.printStackTrace();
 		}
-        //return 0;
+
+        Collections.sort(bookList, new customerComparator());
+        return bookList;
     } 
     public static String processWords(String search) {
         int i;
@@ -59,4 +59,11 @@ public class checkBook {
         command = command + "(CONCAT(title, author) LIKE '%" + search + "%')";
         return command;
     } 
+}
+
+final class customerComparator implements Comparator<fullBook> {
+    @Override
+    public int compare(fullBook b1, fullBook b2) {
+        return b1.getYear().compareTo(b2.getYear());
+    }
 }

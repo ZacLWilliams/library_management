@@ -2,10 +2,16 @@ package com.source;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 //import java.util.ArrayList;
+import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class manageRequest {
     //private String content;
@@ -162,9 +168,39 @@ public class manageRequest {
             html = Jsoup.parse(file, "UTF-8");
         }
         else if ((search = checkSearch(userSearch)) != "") {
-            checkBook.getBooks(search);
+            ArrayList<fullBook> bookList = new ArrayList<fullBook>();
+            bookList = checkBook.getBooks(search);
+            
             file = new File("src/main/resources/Search.html");
+            //file = new File("src/main/resources/test2.html");
             html = Jsoup.parse(file, "UTF-8");
+            //html.getElementById("image").attr("src", bookList.get(0).getUrls()[0]);
+            Element table = html.select("body").getFirst().appendElement("table").attr("style", "width:100%");
+            for (int i = 0; i < bookList.size(); i++) {
+                Element bar = table.appendElement("tr").appendElement("td").attr("valign", "top").appendElement("div").attr("class", "container");
+                Element sub = bar.appendElement("div");
+                sub.appendElement("img").attr("src", bookList.get(i).getUrls()[0]).attr("class", "image");
+
+                Element sub2 = bar.appendElement("div").attr("style", "margin-left:60px;");
+                sub2.appendElement("a").text(bookList.get(i).getTitle());
+                sub2.appendElement("div").attr("style", "font-size:.8em").text("by " + bookList.get(i).getAuthor());
+            }
+
+            //Element bar = html.select("body").getFirst().appendElement("div").attr("class", "container");
+            //Element sub = bar.appendElement("div");
+            //sub.appendElement("img").attr("src", bookList.get(0).getUrls()[0]).attr("class", "image");
+            //Element img = sub.appendElement("img");
+            //img.attr("src", bookList.get(0).getUrls()[0]);
+
+            //sub.appendElement("b").text("TEST");
+            //Element sub2 = bar.appendElement("div").attr("style", "margin-left:60px;");
+            //sub2.appendElement("a").text(bookList.get(0).getTitle());
+
+            //sub2.appendElement("div").attr("style", "font-size:.8em").text("by " + bookList.get(0).getAuthor());
+            //sub3.appendElement("text").text("by " + bookList.get(0).getAuthor());
+
+            File output = new File("src/main/resources/test.html");
+            FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
         }
         else {
             file = new File("src/main/resources/Homepage.html");
