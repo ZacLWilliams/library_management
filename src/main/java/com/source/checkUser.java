@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class checkUser {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "";
+	private static final String PASS = "Sapiens789-";
 
     public static boolean check_db(String username) {
         // true means the username is available

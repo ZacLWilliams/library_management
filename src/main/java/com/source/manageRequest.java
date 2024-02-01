@@ -175,6 +175,13 @@ public class manageRequest {
             //file = new File("src/main/resources/test2.html");
             html = Jsoup.parse(file, "UTF-8");
             //html.getElementById("image").attr("src", bookList.get(0).getUrls()[0]);
+
+            if (cookieId != 0) {
+                html.getElementById("createaccount").text("");
+                html.getElementById("login").text("");
+                html.getElementById("profile").text("Hello " + user.getUsername() + "!");
+            }
+
             Element table = html.select("body").getFirst().appendElement("table").attr("style", "width:100%");
             for (int i = 0; i < bookList.size(); i++) {
                 Element bar = table.appendElement("tr").appendElement("td").attr("valign", "top").appendElement("div").attr("class", "container");
@@ -199,8 +206,8 @@ public class manageRequest {
             //sub2.appendElement("div").attr("style", "font-size:.8em").text("by " + bookList.get(0).getAuthor());
             //sub3.appendElement("text").text("by " + bookList.get(0).getAuthor());
 
-            File output = new File("src/main/resources/test.html");
-            FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
+            //File output = new File("src/main/resources/test.html");
+            //FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
         }
         else {
             file = new File("src/main/resources/Homepage.html");
