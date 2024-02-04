@@ -154,8 +154,11 @@ public class manageRequest {
                     html.select("input[name$=username]").attr("value", data[0]);  
                     html.select("input[name$=password]").attr("value", data[1]);
                 }else {
-                    file = new File("src/main/resources/Success.html");
+                    file = new File("src/main/resources/Success_create.html");
                     html = Jsoup.parse(file, "UTF-8");
+
+                    html.getElementById("title").text("Login successful!");
+                    html.getElementById("login").text("");
                     //html.getElementById("createaccount").text("");
                     //html.getElementById("login").text("");
                     //html.getElementById("profile").text("Hello " + user.getUsername() + "!");
