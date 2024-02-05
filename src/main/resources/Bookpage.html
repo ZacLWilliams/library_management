@@ -14,8 +14,11 @@
             position: relative;
         }
         h1 {
-            margin-top:10;
-            left: 10%;
+            left: 5%;
+            position: relative;
+        }
+        h2 {
+            left: 5%;
             position: relative;
         }
         .submitinfo {
@@ -24,6 +27,23 @@
         }
         nav {
             float: right;
+        }
+        .publisher {
+            left: 5%;
+            position: relative;
+        }
+        .image {
+            margin-left:4%;
+            margin-right:0;
+            margin-top:2%;
+            margin-bottom:0;
+            float:left;
+            height:250px;
+            width:180px
+        }
+        .rating {
+            left: 4%;
+            position: relative;
         }
         </style>
     </head>
@@ -35,7 +55,20 @@
             <a id="homepage" href="./homepage">Homepage</a>
         </nav>
         <br>
-        <h1 id="title"></h1>
+        <div>
+            <img class="image" id="image">
+        </div>
+        <div>
+            <h1 id="title"></h1>
+            <h2 id="author"></h2>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <p class="publisher" id="publisher"></p>
+        </div>
+        <p class="rating" id="rating"></p>
         <br>
     </body>
 </html>

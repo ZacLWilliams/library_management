@@ -220,6 +220,15 @@ public class manageRequest {
             html = Jsoup.parse(file, "UTF-8"); 
 
             html.getElementById("title").text(book.getTitle());
+            html.getElementById("author").text(book.getAuthor());
+            html.getElementById("publisher").text("This edition was published by " + book.getPublisher() + " in " + book.getYear());
+            html.getElementById("image").attr("src", book.getUrls()[2]);
+            if (book.getRating() == null) {
+                html.getElementById("rating").text("Rating: Not yet rated");
+            }
+            else {
+                html.getElementById("rating").text("Rating: " + book.getRating() + "/5");
+            }
 
             if (cookieId != 0) {
                 html.getElementById("createaccount").text("");
