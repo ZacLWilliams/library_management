@@ -14,6 +14,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class manageRequest {
+    private static fullBook book;
+
     //private String content;
     public static String[] processRequest(BufferedReader reader, StringBuilder request, String line) throws Exception {
         String[] information = new String[2];
@@ -96,6 +98,7 @@ public class manageRequest {
         String search;
         File file;
         Document html; 
+        String isbn;
         //String data[] = null;
         //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
         
@@ -192,7 +195,7 @@ public class manageRequest {
                 sub.appendElement("img").attr("src", bookList.get(i).getUrls()[0]).attr("class", "image");
 
                 Element sub2 = bar.appendElement("div").attr("style", "margin-left:60px;");
-                sub2.appendElement("a").text(bookList.get(i).getTitle());
+                sub2.appendElement("a").text(bookList.get(i).getTitle()).attr("href", bookList.get(i).getIsbn());
                 sub2.appendElement("div").attr("style", "font-size:.8em").text("by " + bookList.get(i).getAuthor());
             }
 
@@ -211,6 +214,18 @@ public class manageRequest {
 
             //File output = new File("src/main/resources/test.html");
             //FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
+        }
+        else if ((book = checkBook.checkIsbn(userSearch.substring(1, userSearch.length()))) != null) {
+            file = new File("src/main/resources/Bookpage.html");
+            html = Jsoup.parse(file, "UTF-8"); 
+
+            html.getElementById("title").text(book.getTitle());
+
+            if (cookieId != 0) {
+                html.getElementById("createaccount").text("");
+                html.getElementById("login").text("");
+                html.getElementById("profile").text("Hello " + user.getUsername() + "!");
+            }
         }
         else {
             file = new File("src/main/resources/Homepage.html");

@@ -5,14 +5,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class checkBook {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "Sapiens789-";
+	private static final String PASS = "";
 
     public static ArrayList<fullBook> getBooks(String search) {
         ArrayList<fullBook> bookList = new ArrayList<fullBook>();
@@ -58,7 +57,51 @@ public class checkBook {
         }
         command = command + "(CONCAT(title, author) LIKE '%" + search + "%')";
         return command;
-    } 
+    }
+
+    public static fullBook checkIsbn(String userSearch) {
+        String sql = "SELECT EXISTS(SELECT * FROM book WHERE isbn = ?)";
+        String sql1 = "SELECT * FROM book WHERE isbn = ?";
+        String sql2 = "SELECT * FROM images WHERE isbn = ?";
+        ResultSet check = null;
+        ResultSet rs = null;
+        ResultSet resultImages = null;
+
+	    try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement statement = con.prepareStatement(sql);
+	    PreparedStatement statement1 = con.prepareStatement(sql1); PreparedStatement statement2 = con.prepareStatement(sql2);) {
+
+            statement.setString(1, userSearch);
+            check = statement.executeQuery();
+            check.next();
+
+            if ((check.getInt(1)) < 1) {
+                return null;
+            }
+
+
+		    statement1.setString(1, userSearch);
+            statement2.setString(1, userSearch);
+
+		    rs = statement1.executeQuery();
+            resultImages = statement2.executeQuery();
+
+            rs.next();
+            resultImages.next();
+
+            String[] images = new String[] {resultImages.getString("image_s"), resultImages.getString("image_m"),
+            resultImages.getString("image_l")};
+
+            // Found isbn
+            return new fullBook(rs.getString("isbn"), rs.getString("gen_rating"), rs.getString("title"),
+            rs.getString("author"), rs.getString("year"), rs.getString("publisher"), images);
+
+	    } catch (SQLException e) {
+            System.out.println("TESTRS");
+		    e.printStackTrace();
+	    }
+        // Did not find isbn
+        return null;
+    }
 }
 
 final class customerComparator implements Comparator<fullBook> {
