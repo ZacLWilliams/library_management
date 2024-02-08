@@ -98,7 +98,6 @@ public class manageRequest {
         String search;
         File file;
         Document html; 
-        String isbn;
         //String data[] = null;
         //if (userInput == null || userInput.matches("/") || userInput.matches("/response?search=")) {
         
@@ -188,7 +187,7 @@ public class manageRequest {
                 html.getElementById("profile").text("Hello " + user.getUsername() + "!");
             }
 
-            Element table = html.select("body").getFirst().appendElement("table").attr("style", "width:100%");
+            Element table = html.select("body").getFirst().appendElement("table").attr("style", "margin:auto; width:1000px;");
             for (int i = 0; i < bookList.size(); i++) {
                 Element bar = table.appendElement("tr").appendElement("td").attr("valign", "top").appendElement("div").attr("class", "container");
                 Element sub = bar.appendElement("div");
@@ -219,6 +218,8 @@ public class manageRequest {
             file = new File("src/main/resources/Bookpage.html");
             html = Jsoup.parse(file, "UTF-8"); 
 
+            html.select("title").getFirst().text(book.getTitle());
+
             html.getElementById("title").text(book.getTitle());
             html.getElementById("author").text(book.getAuthor());
             html.getElementById("publisher").text("This edition was published by " + book.getPublisher() + " in " + book.getYear());
@@ -229,11 +230,22 @@ public class manageRequest {
             else {
                 html.getElementById("rating").text("Rating: " + book.getRating() + "/5");
             }
+            
+            // Check if book is added to library
+            //html.select("form").getFirst().appendElement("button").attr("class", "libraryAdd").text("Add to library");
+            // Else
+            //html.select("form").getFirst().appendElement("p").attr("class", "libraryAdd").attr("style", "text-align:center").text("Added to library");
 
+            // Check if user exists
             if (cookieId != 0) {
                 html.getElementById("createaccount").text("");
                 html.getElementById("login").text("");
                 html.getElementById("profile").text("Hello " + user.getUsername() + "!");
+
+                // Check if user already has book in library
+                if (checkBook.checkLibrary(book.getIsbn(), user.getId())) {
+                    html.getElementById("button").text("Remove from library");
+                }
             }
         }
         else {

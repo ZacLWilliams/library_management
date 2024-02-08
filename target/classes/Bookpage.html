@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Login</title>
+        <title></title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
         @import url(https://fonts.googleapis.com/css?family=Open+Sans);
@@ -45,9 +45,15 @@
             left: 4%;
             position: relative;
         }
+        .libraryAdd {
+            left: 4%;
+            position: relative;
+            width: 180px;
+        }
         </style>
     </head>
     <body>
+        <div style="margin:auto; width:1000px;">
         <nav>
             <a id="createaccount" href="./createaccount">Create account</a>
             <a id="login" href="./login">Login</a>
@@ -65,10 +71,12 @@
             <br>
             <br>
             <br>
-            <br>
             <p class="publisher" id="publisher"></p>
         </div>
         <p class="rating" id="rating"></p>
-        <br>
+        <form action="response" method="get">
+            <button id="button" class="libraryAdd">Add to Library</button>
+        </form>
+        </div>
     </body>
 </html>

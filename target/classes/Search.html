@@ -39,16 +39,19 @@
             font-size: 20px;
         }  
         .wrap{
-            width: 20%;
-            position: absolute;
-            left: 5.5%;
+            /*min-width:200px;
+            max-width:200px;
+            border-radius: 500px;
+            margin:auto;*/
+            position: relative;
+            left: 5%;
+            width: 500px;
             /* top: 50%;
-            left: 50%;
             transform: translate(-50%, -50%); --> */
         }
-        h1 {
+        h2 {
             margin-top:10;
-            left: 7%;
+            left: 5%;
             position: relative;
         }
         .submitinfo {
@@ -75,14 +78,16 @@
         }
         </style>
     </head>
-    <nav>
-        <a id="createaccount" href="./createaccount">Create account</a>
-        <a id="login" href="./login">Login</a>
-        <a id="profile" href="./profile"></a>
-    </nav>
-    <br>
     <body>
-        <h1>Search</h1>
+        <div style="margin:auto; width:1000px;">
+        <nav>
+            <a id="createaccount" href="./createaccount">Create account</a>
+            <a id="login" href="./login">Login</a>
+            <a id="profile" href="./profile"></a>
+            <a id="homepage" href="./homepage">Homepage</a>
+        </nav>
+        <br>
+        <h2>Search</h2>
         <div class="wrap">
             <form action="response" method="GET">
             <div class="search">
@@ -95,5 +100,6 @@
             </form>
         </div>
         <br>
+        </div>
     </body>
 </html>

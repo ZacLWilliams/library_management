@@ -39,9 +39,9 @@
             font-size: 20px;
         }  
         .wrap{
-            width: 20%;
-            position: absolute;
-            left: 6.7%;
+            position: relative;
+            left: 20px;
+            width: 500px;
             /* top: 50%;
             left: 50%;
             transform: translate(-50%, -50%); --> */
@@ -64,7 +64,7 @@
         .heading_2 {
             position: relative;
             margin-bottom:0;
-            left: 6.4%;
+            left: 20px;
         }
         </style>
         <script>
@@ -75,6 +75,7 @@
         </script>
     </head>
     <body>
+        <div style="margin:auto; width:1000px;">
         <nav>
             <a id="createaccount" href="./createaccount">Create account</a>
             <a id="login" href="./login">Login</a>
@@ -86,9 +87,8 @@
             <a>&emsp;</a>
             <a href="http://172.17.201.68">Login</a> -->
         </p>
-        <div class="heading"><h1>Badreads</h1></div>
+        <h1>Badreads</h1>
         <br>
-        <div>
             <div class="heading_2"><h2>Search books</h2></div>
             <form action="response" method="GET">
             <div class="wrap">

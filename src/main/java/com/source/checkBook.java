@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class checkBook {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "";
+	private static final String PASS = "Sapiens789-";
 
     public static ArrayList<fullBook> getBooks(String search) {
         ArrayList<fullBook> bookList = new ArrayList<fullBook>();
@@ -78,7 +78,6 @@ public class checkBook {
                 return null;
             }
 
-
 		    statement1.setString(1, userSearch);
             statement2.setString(1, userSearch);
 
@@ -101,6 +100,29 @@ public class checkBook {
 	    }
         // Did not find isbn
         return null;
+    }
+
+    public static boolean checkLibrary(String isbn, String id) {
+        String sql = "SELECT EXISTS(SELECT * FROM library WHERE isbn = ? AND id = ?)";
+        ResultSet rs = null;
+
+        try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+		PreparedStatement statement = con.prepareStatement(sql);) {
+            
+            statement.setString(1, isbn);
+            statement.setString(2, id);
+
+            rs = statement.executeQuery(sql);
+            rs.next();
+
+            // Check if user has that book in library
+            if((rs.getInt(1)) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return false;
     }
 }
 
