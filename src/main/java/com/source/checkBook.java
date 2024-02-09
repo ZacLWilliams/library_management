@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class checkBook {
 	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "Sapiens789-";
+	private static final String PASS = "";
 
     public static ArrayList<fullBook> getBooks(String search) {
         ArrayList<fullBook> bookList = new ArrayList<fullBook>();
@@ -102,23 +102,51 @@ public class checkBook {
         return null;
     }
 
+    public static void removeBook(String id, String isbn) {
+        System.out.println(id);
+        System.out.println(isbn);
+        String sql = "DELETE FROM library WHERE user_id = ? AND isbn = ?";
+        //String sql2 = "INSERT INTO library (user_id, isbn) VALUES (?, ?)";
+        //PreparedStatement statement2 = con.prepareStatement(sql2);
+        //statement2.setString(1, id);
+        //statement2.setString(2, isbn);
+        //statement2.executeQuery(sql2);
+
+        try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+		PreparedStatement statement = con.prepareStatement(sql);) {
+            
+            statement.setString(1, id);
+            statement.setString(2, isbn);
+            
+            statement.executeUpdate();
+        } catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+
     public static boolean checkLibrary(String isbn, String id) {
-        String sql = "SELECT EXISTS(SELECT * FROM library WHERE isbn = ? AND id = ?)";
+        String sql = "SELECT EXISTS (SELECT * FROM library WHERE user_id = ? AND isbn = ?)";
+        //String sql2 = "INSERT INTO library (user_id, isbn) VALUES (?, ?)";
+        //PreparedStatement statement2 = con.prepareStatement(sql2);
+        //statement2.setString(1, id);
+        //statement2.setString(2, isbn);
+        //statement2.executeQuery(sql2);
         ResultSet rs = null;
 
         try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
 		PreparedStatement statement = con.prepareStatement(sql);) {
             
-            statement.setString(1, isbn);
-            statement.setString(2, id);
+            statement.setString(1, id);
+            statement.setString(2, isbn);
 
-            rs = statement.executeQuery(sql);
+            rs = statement.executeQuery();
             rs.next();
 
             // Check if user has that book in library
             if((rs.getInt(1)) > 0) {
                 return true;
             }
+            
         } catch (SQLException e) {
 			e.printStackTrace();
 		}

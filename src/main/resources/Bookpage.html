@@ -9,18 +9,6 @@
             /*background: #f2f2f2;*/
             font-family: 'Open Sans', sans-serif;
         }
-        .createaccount {
-            left: 10%;
-            position: relative;
-        }
-        h1 {
-            left: 5%;
-            position: relative;
-        }
-        h2 {
-            left: 5%;
-            position: relative;
-        }
         .submitinfo {
             width: 180px;
             height: 25px;
@@ -29,11 +17,11 @@
             float: right;
         }
         .publisher {
-            left: 5%;
+            left: 4%;
             position: relative;
         }
         .image {
-            margin-left:4%;
+            margin-left:0;
             margin-right:0;
             margin-top:2%;
             margin-bottom:0;
@@ -41,12 +29,11 @@
             height:250px;
             width:180px
         }
-        .rating {
-            left: 4%;
+        .moveinfo {
+            left: 2%;
             position: relative;
         }
         .libraryAdd {
-            left: 4%;
             position: relative;
             width: 180px;
         }
@@ -65,17 +52,16 @@
             <img class="image" id="image">
         </div>
         <div>
-            <h1 id="title"></h1>
-            <h2 id="author"></h2>
+            <h1 class="moveinfo" id="title"></h1>
+            <h2 class="moveinfo" id="author"></h2>
             <br>
             <br>
             <br>
             <br>
-            <p class="publisher" id="publisher"></p>
+            <p class="moveinfo" id="publisher"></p>
         </div>
-        <p class="rating" id="rating"></p>
-        <form action="response" method="get">
-            <button id="button" class="libraryAdd">Add to Library</button>
+        <p class="move" id="rating"></p>
+        <form method="post">
         </form>
         </div>
     </body>

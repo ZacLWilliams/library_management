@@ -83,6 +83,7 @@ public class manageRequest {
                 //}
             }
         }
+        System.out.println(content);
         printRequest(request);
         information[0] = content; information[1] = cookieId;
         return information;
@@ -242,11 +243,27 @@ public class manageRequest {
                 html.getElementById("login").text("");
                 html.getElementById("profile").text("Hello " + user.getUsername() + "!");
 
+                html.select("form").getFirst().attr("action", book.getIsbn());
+
+                html.select("form").getFirst().appendElement("button").attr("type", "submit").attr("name", "button").attr("id", "button").attr("class", "libraryAdd");
+
                 // Check if user already has book in library
                 if (checkBook.checkLibrary(book.getIsbn(), user.getId())) {
-                    html.getElementById("button").text("Remove from library");
+                    //html.getElementById("postdata").attr("value", "remove");
+                    html.getElementById("button").attr("value", "remove").text("Remove from library");
                 }
+                else {
+                    //html.getElementById("postdata").attr("value", "add");
+                    html.getElementById("button").attr("value", "add").text("Add to library");
+                }
+                html.select("form").getFirst().appendElement("input").attr("name", "temp").attr("value", "temp").attr("type", "hidden");
             }
+            else {
+                html.select("form").getFirst().appendElement("p").text("Login to add book");
+            }
+
+            File output = new File("src/main/resources/test.html");
+            FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
         }
         else {
             file = new File("src/main/resources/Homepage.html");
