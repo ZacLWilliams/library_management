@@ -9,37 +9,83 @@
             /*background: #f2f2f2;*/
             font-family: 'Open Sans', sans-serif;
         }
-        .createaccount {
-            left: 10%;
+        .search {
+            width: 60%;
             position: relative;
+            display: flex;
         }
-        h1 {
+        .searchTerm {
+            width: 100%;
+            border: 3px solid #747879;
+            border-right: none;
+            padding: 5px;
+            height: 20px;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            color: #747879;
+        }
+        .searchTerm:focus{
+            color: #000000;
+        }
+        .searchButton {
+            width: 40px;
+            height: 35px;
+            border: 1px solid #747879;
+            background: #747879;
+            text-align: center;
+            color: #fff;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-size: 20px;
+        }  
+        .wrap{
+            /*min-width:200px;
+            max-width:200px;
+            border-radius: 500px;
+            margin:auto;*/
+            position: relative;
+            left: 5%;
+            width: 500px;
+            /* top: 50%;
+            transform: translate(-50%, -50%); --> */
+        }
+        h2 {
             margin-top:10;
-            left: 10%;
+            left: 5%;
             position: relative;
         }
         .submitinfo {
             width: 180px;
             height: 25px;
         }
+        h4 {
+            margin:0px;
+        }
+        .image {
+            margin-left:4%;
+            margin-bottom:0;
+            float:left;
+            height:70px;
+            width:50px
+        }
+        .container {
+            width:100%;
+            height:auto;
+            padding:1%;
+        }
+        nav {
+            float: right;
+        }
         </style>
     </head>
     <body>
         <div style="margin:auto; width:1000px;">
-        <h1>Login</h1>
-        <br><br><br><br>
-        <div class="profile">
-            <form name="form" action="" method="post">
-                <p>test</p>
-                <input type="text" id="username" name="username">
-                <span id="user"></span>
-                <br>
-                <p>test</p>
-                <input type="password" id="password" name="password">
-                <br><br><br>
-                <button id="toggle" type="submit" class="submitinfo" name="submitbutton" value="userinput">Login</button>
-            </form>
-        </div>
+        <nav>
+            <a id="homepage" href="./homepage">Homepage</a>
+        </nav>
+        <br>
+        <h2>Your books</h2>
+        <br>
         </div>
     </body>
 </html>

@@ -59,19 +59,14 @@ public class webServer {
 
                         user = new userId(temp[0], temp[1], temp[2]);
                     }
-                    System.out.println(information[1]);
-                    System.out.println("test 1" + information[0]);
 
                     if (information[0] != "") {
                         data = processInfo.processData(information[0]);
-                        System.out.println(data[0]);
                         if (data[0].equals("add")) {
-                            //checkBook.addBook(user.getId(), userSearch);
+                            checkLibrary.addBook(user.getId(), userSearch.substring(1, userSearch.length()));
                         }
                         else if (data[0].equals("remove")) {
-                            System.out.println(user.getId());
-                            System.out.println(userSearch);
-                            checkBook.removeBook(user.getId(), userSearch.substring(1, userSearch.length()));
+                            checkLibrary.removeBook(user.getId(), userSearch.substring(1, userSearch.length()));
                         }
                         else if (userSearch.equals("/login") == true && checkUser.check_user_pass(data[0], data[1]) == true) {
                             logincheck = true;

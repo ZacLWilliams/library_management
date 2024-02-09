@@ -83,7 +83,6 @@ public class manageRequest {
                 //}
             }
         }
-        System.out.println(content);
         printRequest(request);
         information[0] = content; information[1] = cookieId;
         return information;
@@ -170,8 +169,25 @@ public class manageRequest {
             }
         }
         else if (userSearch.equals("/profile")) {
+            ArrayList<fullBook> bookList = new ArrayList<fullBook>();
+            bookList = checkLibrary.getBooks(user.getId());
+
             file = new File("src/main/resources/Profile.html");
             html = Jsoup.parse(file, "UTF-8");
+
+            Element table = html.select("body").getFirst().appendElement("table").attr("style", "margin:auto; width:1000px;");
+            for (int i = 0; i < bookList.size(); i++) {
+                Element bar = table.appendElement("tr").appendElement("td").attr("valign", "top").appendElement("div").attr("class", "container");
+                Element sub = bar.appendElement("div");
+                sub.appendElement("img").attr("src", bookList.get(i).getUrls()[0]).attr("class", "image");
+
+                Element sub2 = bar.appendElement("div").attr("style", "margin-left:60px;");
+                sub2.appendElement("a").text(bookList.get(i).getTitle()).attr("href", bookList.get(i).getIsbn());
+                sub2.appendElement("div").attr("style", "font-size:.8em").text("by " + bookList.get(i).getAuthor());
+            }
+
+            //File output = new File("src/main/resources/test.html");
+            //FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
         }
         else if ((search = checkSearch(userSearch)) != "") {
             ArrayList<fullBook> bookList = new ArrayList<fullBook>();
@@ -248,7 +264,7 @@ public class manageRequest {
                 html.select("form").getFirst().appendElement("button").attr("type", "submit").attr("name", "button").attr("id", "button").attr("class", "libraryAdd");
 
                 // Check if user already has book in library
-                if (checkBook.checkLibrary(book.getIsbn(), user.getId())) {
+                if (checkLibrary.checkUserLibrary(book.getIsbn(), user.getId())) {
                     //html.getElementById("postdata").attr("value", "remove");
                     html.getElementById("button").attr("value", "remove").text("Remove from library");
                 }
@@ -261,9 +277,6 @@ public class manageRequest {
             else {
                 html.select("form").getFirst().appendElement("p").text("Login to add book");
             }
-
-            File output = new File("src/main/resources/test.html");
-            FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
         }
         else {
             file = new File("src/main/resources/Homepage.html");
