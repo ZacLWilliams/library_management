@@ -5,14 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class checkLibrary {
     private static final String DB_URL = "jdbc:mysql://localhost/library_db";
 	private static final String USER = "root";
-	private static final String PASS = "Sapiens789-";
+	private static final String PASS = "";
 
     public static void removeBook(String id, String isbn) {
         String sql = "DELETE FROM library WHERE user_id = ? AND isbn = ?";
