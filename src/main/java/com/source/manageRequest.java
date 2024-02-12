@@ -2,8 +2,10 @@ package com.source;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -170,7 +172,7 @@ public class manageRequest {
             file = new File("src/main/resources/Profile.html");
             html = Jsoup.parse(file, "UTF-8");
 
-            Element table = html.select("body").getFirst().appendElement("table").attr("style", "margin:auto; width:1000px;");
+            Element table = html.select("article").getFirst().appendElement("table").attr("style", "margin:auto; width:1000px;");
             for (int i = 0; i < bookList.size(); i++) {
                 Element bar = table.appendElement("tr").appendElement("td").attr("valign", "top").appendElement("div").attr("class", "container");
                 Element sub = bar.appendElement("div");
@@ -199,9 +201,9 @@ public class manageRequest {
                 html.getElementById("profile").text("Hello " + user.getUsername() + "!");
             }
 
-            Element table = html.select("body").getFirst().appendElement("table").attr("style", "margin:auto; width:1000px;");
+            Element table = html.select("article").getFirst().appendElement("table");
             for (int i = 0; i < bookList.size(); i++) {
-                Element bar = table.appendElement("tr").appendElement("td").attr("valign", "top").appendElement("div").attr("class", "container");
+                Element bar = table.appendElement("tr").appendElement("td").attr("valign", "top");
                 Element sub = bar.appendElement("div");
                 sub.appendElement("img").attr("src", bookList.get(i).getUrls()[0]).attr("class", "image");
 
@@ -209,6 +211,9 @@ public class manageRequest {
                 sub2.appendElement("a").text(bookList.get(i).getTitle()).attr("href", bookList.get(i).getIsbn());
                 sub2.appendElement("div").attr("style", "font-size:.8em").text("by " + bookList.get(i).getAuthor());
             }
+
+            File output = new File("src/main/resources/test.html");
+            FileUtils.writeStringToFile(output, html.outerHtml(), StandardCharsets.UTF_8);
         }
         else if ((book = checkBook.checkIsbn(userSearch.substring(1, userSearch.length()))) != null) {
             file = new File("src/main/resources/Bookpage.html");
