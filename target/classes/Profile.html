@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Login</title>
+        <title>Profile</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
         @import url(https://fonts.googleapis.com/css?family=Open+Sans);
@@ -76,16 +76,41 @@
         nav {
             float: right;
         }
+        .sideBar {
+            margin-top:80px;
+            left: -10%;
+            position: absolute;
+        }
+        .bookList {
+            position: relative;
+        }
         </style>
+        <script type="text/javascript">
+            function deleteCookies() {
+                var cookies = document.cookie.split(";");
+                
+                for (var i = 0; i <cookies.length; i++) {
+                    document.cookie = cookies[i] + "=;expires=" + new Date(0).toUTCString() + "path=/;";
+                }
+                location.href = "/Homepage"
+            }
+        </script>
     </head>
     <body>
-        <div style="margin:auto; width:1000px;">
-        <nav>
-            <a id="homepage" href="./homepage">Homepage</a>
-        </nav>
-        <br>
-        <h2>Your books</h2>
-        <br>
+        <div class="bookList" style="margin:auto; width:1000px;">
+            <div class="sideBar">
+                <h4>Profile options</h4>
+                <br>
+                <button onclick="deleteCookies()" id="logout">Logout</button>
+            </div>
+            <div>
+                <nav>
+                    <a id="homepage" href="./homepage">Homepage</a>
+                </nav>
+                <br>
+                <h2>Your books</h2>
+                <br>
+            </div>
         </div>
     </body>
 </html>
