@@ -8,9 +8,9 @@ import java.sql.SQLException;
 //import java.util.Scanner;
 
 public class checkUser {
-	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
-	private static final String USER = "root";
-	private static final String PASS = "Sapiens789-";
+	private static final String DB_URL = System.getenv("MYSQL_URL");
+	private static final String USER = System.getenv("MYSQL_USER");
+	private static final String PASS = System.getenv("MYSQL_PASS");
 
     public static boolean check_db(String username) {
         // true means the username is available

@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class checkLibrary {
-    private static final String DB_URL = "jdbc:mysql://localhost/library_db";
-	private static final String USER = "root";
-	private static final String PASS = "";
+	private static final String DB_URL = System.getenv("MYSQL_URL");
+	private static final String USER = System.getenv("MYSQL_USER");
+	private static final String PASS = System.getenv("MYSQL_PASS");
 
     public static void removeBook(String id, String isbn) {
         String sql = "DELETE FROM library WHERE user_id = ? AND isbn = ?";

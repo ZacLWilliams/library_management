@@ -9,9 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class checkBook {
-	private static final String DB_URL = "jdbc:mysql://localhost/library_db";
-	private static final String USER = "root";
-	private static final String PASS = "";
+	private static final String DB_URL = System.getenv("MYSQL_URL");
+	private static final String USER = System.getenv("MYSQL_USER");
+	private static final String PASS = System.getenv("MYSQL_PASS");
 
     public static ArrayList<fullBook> getBooks(String search) {
         ArrayList<fullBook> bookList = new ArrayList<fullBook>();
